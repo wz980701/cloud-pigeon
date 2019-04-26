@@ -12,69 +12,69 @@
                 </header>
                 <section class="rg_form">
                     <input
-                    v-model.trim="$v.name.$model"
+                    v-model.trim="$v.formdata.name.$model"
                     type="text"
                     class="rg_name"
                     placeholder="请输入姓名">
                     <span
-                    v-if="!$v.name.required"
+                    v-if="!$v.formdata.name.required"
                     class="form-group_message"
                     >
                     * 必须输入姓名
                     </span>
                     <span
-                    v-if="!$v.name.minLength"
+                    v-if="!$v.formdata.name.minLength"
                     class="form-group_message"
                     >
                     * 请输入真实姓名
                     </span>
                     <input
-                    v-model.trim="$v.sid.$model"
+                    v-model.trim="$v.formdata.sid.$model"
                     type="text"
                     class="rg_studentNum"
                     placeholder="请输入学号">
                     <span
-                    v-if="!$v.sid.required"
+                    v-if="!$v.formdata.sid.required"
                     class="form-group_message"
                     >
                     * 必须输入学号
                     </span>
                     <span
-                    v-if="!$v.sid.minLength"
+                    v-if="!$v.formdata.sid.minLength"
                     class="form-group_message"
                     >
                     * 学号为10位
                     </span>
                     <span
-                    v-if="!$v.sid.maxLength"
+                    v-if="!$v.formdata.sid.maxLength"
                     class="form-group_message"
                     >
                     * 学号为10位
                     </span>
                     <input
-                    v-model.trim="$v.phone.$model"
+                    v-model.trim="$v.formdata.phone.$model"
                     type="text"
                     class="rg_phone"
                     placeholder="请输入手机号">
                     <span
-                    v-if="!$v.phone.minLength"
+                    v-if="!$v.formdata.phone.minLength"
                     class="form-group_message"
                     >
                     * 手机号为11位
                     </span>
                     <span
-                    v-if="!$v.phone.maxLength"
+                    v-if="!$v.formdata.phone.maxLength"
                     class="form-group_message"
                     >
                     * 手机号为11位
                     </span>
                     <input
-                    v-model.trim="$v.password.$model"
+                    v-model.trim="$v.formdata.password.$model"
                     type="password"
                     class="rg_name"
                     placeholder="请输入密码">
                     <span
-                    v-if="!$v.password.minLength"
+                    v-if="!$v.formdata.password.minLength"
                     class="form-group_message"
                     >
                     * 密码不能少于6位
@@ -95,38 +95,42 @@
 </template>
 <script>
 import { Dialog } from 'vant'
-import { setLocalStore, getLocalStore, setSessionStore } from 'js/common.js'
 import { required, minLength, maxLength, numeric } from 'vuelidate/lib/validators'
+import { getFormdata } from 'js/common.js'
 
 export default {
     name: 'RiderRegist',
     data () {
         return {
-            name: '',
-            phone: '',
-            password: '',
-            sid: '',
-            role: 'delivery',
+            formdata: {
+                name: '',
+                phone: '',
+                password: '',
+                sid: '',
+                role: 'delivery'
+            },
             showRegist: false
         }
     },
     validations: {
-        name: {
-            required,
-            minLength: minLength(2)
-        },
-        sid: {
-            required,
-            minLength: minLength(10),
-            maxLength: maxLength(10)
-        },
-        phone: {
-            minLength: minLength(11),
-            maxLength: maxLength(11),
-            numeric
-        },
-        password: {
-            minLength: minLength(6)
+        formdata: {
+            name: {
+                required,
+                minLength: minLength(2)
+            },
+            sid: {
+                required,
+                minLength: minLength(10),
+                maxLength: maxLength(10)
+            },
+            phone: {
+                minLength: minLength(11),
+                maxLength: maxLength(11),
+                numeric
+            },
+            password: {
+                minLength: minLength(6)
+            }
         }
     },
     mounted () {
@@ -134,19 +138,22 @@ export default {
     },
     methods: {
         ToRegist () {
-            const formdata = new FormData()
-            formdata.append('role', this.role)
-            formdata.append('name', this.name)
-            formdata.append('sid', this.sid)
-            formdata.append('phone', this.phone)
-            formdata.append('password', this.password)
-            this.axios.post('/register', formdata).then((res) => {
-                this.ToRemind('注册成功,请耐心等待后台审核')
-                this.$router.push('/index')
-            }).catch(() => {
-                this.ToRemind('注册失败，请重新注册')
-                this.$router.go(0)
-            })
+            if (this.$v.$invalid) {
+                this.ToRemind('请正确填写信息')
+            } else {
+                this.axios.post('/register', getFormdata(this.formdata)).then(() => {
+                    this.getSuc()
+                }).catch(() => {
+                    this.getFail()
+                })
+            }
+        },
+        getSuc () {
+            this.ToRemind('注册成功,请耐心等待后台审核')
+            this.$router.push('/index')
+        },
+        getFail () {
+            this.ToRemind('注册失败，请重新注册')
         },
         ToRemind (text) {
             Dialog.alert({
@@ -162,7 +169,8 @@ export default {
 @import 'sass/common.scss';
 .rg_page {
     padding-top: .6rem;
-    @include wh(100%, 100%);
+    // @include wh(100%, 100%);
+    min-height: 100%;
     background-color: $theme-color;
     .rg_back {
             position: absolute;

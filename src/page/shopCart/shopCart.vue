@@ -275,18 +275,17 @@ export default {
                         const formdata = new FormData()
                         formdata.append('foodlist', JSON.stringify(idlist))
                         formdata.append('numberlist', JSON.stringify(countlist))
-                        formdata.append('money', this.totalPrice + this.deliveryPrice)
+                        // formdata.append('money', this.totalPrice + this.deliveryPrice)
+                        formdata.append('money', 0.01)
                         formdata.append('district', info.district)
                         formdata.append('dormtype', info.dormtype)
                         formdata.append('building', info.building)
                         formdata.append('dorm', info.dorm)
                         formdata.append('userphone', info.phone)
-                        formdata.append('fee', this.deliveryPrice)
-                        this.axios.post('/order/generate', formdata).then(() => {
-                            Dialog.alert({
-                                message: '下单成功'
-                            })
-                            this.$router.push('/order')
+                        formdata.append('fee', 0)
+                        this.axios.post('/order/generate_wx', formdata).then((res) => {
+                            const data = res.data.data
+                            this.callpay (data)
                         }).catch(() => {
                             Dialog.alert({
                                 message: '下单失败'
@@ -295,6 +294,32 @@ export default {
                     }).catch(() => {
                         return
                     })
+                }
+            },
+            jsApiCall (params)
+            {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    params,
+                    function(){
+                        Dialog.alert({
+                            message: '下单成功'
+                        })
+                        this.$router.push('/order')
+                    }
+                );
+            },
+            callpay (params)
+            {
+                if (typeof WeixinJSBridge == "undefined"){
+                    if( document.addEventListener ){
+                        document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(params), false);
+                    }else if (document.attachEvent){
+                        document.attachEvent('WeixinJSBridgeReady', this.jsApiCall(params));
+                        document.attachEvent('onWeixinJSBridgeReady', this.jsApiCall(params));
+                    }
+                }else{
+                    this.jsApiCall(params);
                 }
             }
     },

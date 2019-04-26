@@ -36,7 +36,7 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { RouteTo, timestampToTime, setSessionStore, getSerialId } from 'js/common.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
 Vue.use(PullRefresh)
@@ -46,8 +46,8 @@ export default {
     name: 'AskOrder',
     data () {
         return {
-            isInit: false,
-            isLoading: false,
+            isInit: false, //初次获取List刷新
+            isLoading: false, //下拉刷新
             askOrderList: [],
             websocket: null
         }
@@ -61,6 +61,7 @@ export default {
             }).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
+                    item.order_id = getSerialId(item.timestamp, item.serial_id)
                     item.created_at = timestampToTime(item.created_at)
                     this.askOrderList.unshift(item)
                 })
@@ -78,12 +79,12 @@ export default {
     //   this.websocket.close() //离开路由之后断开websocket连接
     // },
     methods: {
-        _initScroll () {
+        _initScroll () { //初始化滚动高度
             this.ao_page = new BScroll(this.$refs.ao_page, {
                 click: true
             })
         },
-        onRefresh () {
+        onRefresh () { //刷新
             setTimeout(() => {
                 this.$toast('刷新成功');
                 this.isLoading = false;
@@ -105,11 +106,11 @@ export default {
             })
             }, 500)
         },
-        ToDetail (index) {
-            setSessionStore('order_id', this.askOrderList[index].serial_id)
+        ToDetail (index) { //订单详情
+            setSessionStore('order_id', this.askOrderList[index].order_id)
             this.$router.push('/orderDetail')
         },
-        ToCancel (index) {
+        ToCancel (index) { //取消订单
             Dialog.confirm({
                 message: '确认要取消订单吗？'
             }).then(() => {
@@ -196,9 +197,6 @@ export default {
     bottom: .6rem;
     width: 100%;
     overflow: hidden;
-    .ao_loading {
-        @include cl;
-    }
         .ao_list {
         width: 85%;
         margin: 0 auto;

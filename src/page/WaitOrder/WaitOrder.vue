@@ -118,7 +118,10 @@ export default {
                         serial_id: this.allOrderList[index].serial_id
                     }
                 }).then(() => {
-                    this.allOrderList.splice[index, 1]
+                    Dialog.alert({
+                        message: '确认成功'
+                    })
+                    this.allOrderList.splice(index, 1)
                 }).catch(() => {
                     Dialog.alert({
                         message: '确认失败'

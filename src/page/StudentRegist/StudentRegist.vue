@@ -13,70 +13,70 @@
                 <section class="sg_form">
                     <input
                     autofocus
-                    v-model.trim="$v.name.$model"
+                    v-model.trim="$v.formdata.name.$model"
                     type="text"
                     class="sg_name"
                     placeholder="请输入姓名"
                     >
                     <span
-                    v-if="!$v.name.required"
+                    v-if="!$v.formdata.name.required"
                     class="form-group_message"
                     >
                     * 必须输入姓名
                     </span>
                     <span
-                    v-if="!$v.name.minLength"
+                    v-if="!$v.formdata.name.minLength"
                     class="form-group_message"
                     >
                     * 请输入真实姓名
                     </span>
                     <input
-                    v-model.trim="$v.sid.$model"
+                    v-model.trim="$v.formdata.sid.$model"
                     type="text"
                     class="sg_studentNum"
                     placeholder="请输入学号">
                     <span
-                    v-if="!$v.sid.required"
+                    v-if="!$v.formdata.sid.required"
                     class="form-group_message"
                     >
                     * 必须输入学号
                     </span>
                     <span
-                    v-if="!$v.sid.minLength"
+                    v-if="!$v.formdata.sid.minLength"
                     class="form-group_message"
                     >
                     * 学号为10位
                     </span>
                     <span
-                    v-if="!$v.sid.maxLength"
+                    v-if="!$v.formdata.sid.maxLength"
                     class="form-group_message"
                     >
                     * 学号为10位
                     </span>
                     <input
-                    v-model.trim="$v.phone.$model"
+                    v-model.trim="$v.formdata.phone.$model"
                     type="text"
                     class="sg_phone"
                     placeholder="请输入手机号">
                     <span
-                    v-if="!$v.phone.minLength"
+                    v-if="!$v.formdata.phone.minLength"
                     class="form-group_message"
                     >
                     * 手机号为11位
                     </span>
                     <span
-                    v-if="!$v.phone.maxLength"
+                    v-if="!$v.formdata.phone.maxLength"
                     class="form-group_message"
                     >
                     * 手机号为11位
                     </span>
                     <input
-                    v-model.trim="$v.password.$model"
+                    v-model.trim="$v.formdata.password.$model"
                     type="password"
                     class="sg_name"
                     placeholder="请输入密码">
                     <span
-                    v-if="!$v.password.minLength"
+                    v-if="!$v.formdata.password.minLength"
                     class="form-group_message"
                     >
                     * 密码不能少于6位
@@ -89,42 +89,42 @@
                         type="text"
                         class="sg_building"
                         placeholder="XX"
-                        v-model.trim="$v.building.$model"
+                        v-model.trim="$v.formdata.building.$model"
                         >
                         <label>栋</label>
                         <input
                         type="text"
                         class="sg_dormitory"
                         placeholder="宿舍号"
-                        v-model.trim="$v.dorm.$model"
+                        v-model.trim="$v.formdata.dorm.$model"
                         >
                     </div>
                     <span
-                    v-if="!$v.building.required"
+                    v-if="!$v.formdata.building.required"
                     class="form-group_message"
                     >
                     * 必须填写地址
                     </span>
                     <span
-                    v-if="!$v.building.minValue"
+                    v-if="!$v.formdata.building.minValue"
                     class="form-group_message"
                     >
                     * 请输入正确地址
                     </span>
                     <span
-                    v-if="!$v.building.maxValue"
+                    v-if="!$v.formdata.building.maxValue"
                     class="form-group_message"
                     >
                     * 请输入正确地址
                     </span>
                     <span
-                    v-if="!$v.dorm.minLength"
+                    v-if="!$v.formdata.dorm.minLength"
                     class="form-group_message"
                     >
                     * 请输入正确地址
                     </span>
                     <span
-                    v-if="!$v.dorm.maxLength"
+                    v-if="!$v.formdata.dorm.maxLength"
                     class="form-group_message"
                     >
                     * 请输入正确地址
@@ -135,7 +135,10 @@
                     value="注册"
                     @click="ToRegist"
                     >
-                    <router-link to="/studentLogin" tag="div" class="sg_login">
+                    <router-link
+                    to="/studentLogin"
+                    tag="div"
+                    class="sg_login">
                         Sign In
                     </router-link>
                 </section>
@@ -145,52 +148,56 @@
 </template>
 <script>
 import { Dialog } from 'vant'
-import { setLocalStore, getLocalStore, setSessionStore } from 'js/common.js'
+import { setLocalStore, getLocalStore, setSessionStore, getFormdata } from 'js/common.js'
 import { required, minLength, maxLength, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 
 export default {
     name: 'StudentRegist',
     data () {
         return {
-            name: '',
-            phone: '',
-            password: '',
-            studentName: '',
-            sid: '',
-            role: 'user',
-            building: '',
-            dorm: '',
+            formdata: {
+                name: '',
+                phone: '',
+                password: '',
+                studentName: '',
+                sid: '',
+                role: 'user',
+                building: '',
+                dorm: ''
+            },
             showRegist: false
         }
     },
     validations: {
-        name: {
-            required,
-            minLength: minLength(2)
-        },
-        sid: {
-            required,
-            minLength: minLength(10),
-            maxLength: maxLength(10)
-        },
-        phone: {
-            minLength: minLength(11),
-            maxLength: maxLength(11),
-            numeric
-        },
-        password: {
-            minLength: minLength(6)
-        },
-        building: {
-            required,
-            minValue: minValue(7),
-            maxValue: maxValue(48)
-        },
-        dorm: {
-            required,
-            minLength: 3,
-            maxLength: 3,
-            numeric
+        formdata: {
+            name: {
+                required,
+                minLength: minLength(2)
+            },
+            sid: {
+                required,
+                minLength: minLength(10),
+                maxLength: maxLength(10)
+            },
+            phone: {
+                minLength: minLength(11),
+                maxLength: maxLength(11),
+                numeric
+            },
+            password: {
+                minLength: minLength(6)
+            },
+            building: {
+                required,
+                minValue: minValue(7),
+                maxValue: maxValue(48)
+            },
+            dorm: {
+                required,
+                minLength: 3,
+                maxLength: 3,
+                numeric
+            }
         }
     },
     mounted () {
@@ -198,22 +205,24 @@ export default {
     },
     methods: {
         ToRegist () {
-            const formdata = new FormData()
-            formdata.append('role', this.role)
-            formdata.append('name', this.name)
-            formdata.append('sid', this.sid)
-            formdata.append('phone', this.phone)
-            formdata.append('password', this.password)
-            formdata.append('building', this.building)
-            formdata.append('dorm', this.dorm)
-            this.axios.post('/register', formdata).then((res) => {
-                // this.ToRemind('注册成功')
-                setLocalStore('user_token', res.data.data.token)
-                this.ToLogin()
-            }).catch(() => {
-                // this.ToRemind('注册失败，请重新注册')
-                // this.$router.go(0)
-            })
+            if (this.$v.$invalid) {
+                this.ToRemind('请正确填写信息')
+            } else {
+                this.axios.post('/register', getFormdata(this.formdata)).then((res) => {
+                    this.getSuc(res)
+                }).catch(() => {
+                    this.getFail()
+                })
+            }
+        },
+        getSuc (res) {
+            const data = res.data.data
+            this.ToRemind('注册成功')
+            setLocalStore('user_token', data.token)
+            this.ToLogin()
+        },
+        getFail () {
+            this.ToRemind('注册失败，请重新注册')
         },
         ToRemind (text) {
             Dialog.alert({
@@ -227,7 +236,6 @@ export default {
             this.axios.post('/login', formdata).then((res) => {
                 const data = res.data.data
                 setSessionStore('user_info', JSON.stringify(data))
-                console.log(data)
                 this.$router.push('/home')
             })
         }

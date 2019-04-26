@@ -4,8 +4,7 @@ import VueRouter from 'vue-router'
 import Index from '../page/Index/Index.vue'
 import RiderRegist from '../page/RiderRegist/RiderRegist.vue'
 import StudentRegist from '../page/StudentRegist/StudentRegist.vue'
-import RiderLogin from '../page/RiderLogin/RiderLogin.vue'
-import StudentLogin from '../page/StudentLogin/StudentLogin.vue'
+import Login from '../page/Login/Login.vue'
 import Home from '../page/Home/Home.vue'
 import Order from '../page/Order/Order.vue'
 import My from '../page/My/My.vue'
@@ -24,6 +23,7 @@ import Goods from '../page/Goods/Goods.vue'
 import Help from '../page/Help/Help.vue'
 import Contact from '../page/Contact/Contact.vue'
 import RiderOrderDetail from '../page/RiderOrderDetail/RiderOrderDetail.vue'
+import Pay from '../page/Pay/Pay.vue'
 
 Vue.use(VueRouter)
 
@@ -47,11 +47,11 @@ export default new VueRouter({
         },
         {
             path: '/riderLogin',
-            component: RiderLogin
+            component: Login
         },
         {
             path: '/studentLogin',
-            component: StudentLogin
+            component: Login
         },
         {
             path: '/home',
@@ -145,6 +145,10 @@ export default new VueRouter({
         {
             path: '/riderOrderDetail',
             component: RiderOrderDetail
+        },
+        {
+            path: '/pay',
+            component: Pay
         }
     ]
 })

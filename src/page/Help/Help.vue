@@ -2,7 +2,7 @@
     <div>
         <router-link class="h_head" to="/my" tag="div">
             <i class="iconfont icon-l_arrow"></i>
-            <p>配送地址修改</p>
+            <p>帮助与反馈</p>
         </router-link>
         <textarea
         placeholder="say something~"

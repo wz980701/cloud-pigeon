@@ -81,3 +81,16 @@ export function webCloseLink(WebSocketId){
         }, 15000)
 }
 
+export function getFormdata (data) {    //获取formdata
+    let formdata = new FormData()
+    const _formdata = data
+    for (let key in _formdata) {
+        formdata.append(key, _formdata[key])
+    }
+    return formdata
+}
+
+export function getSerialId (time, id) {
+    return (100000000000000 + id) + "" + time
+}
+

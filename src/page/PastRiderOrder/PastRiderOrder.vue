@@ -88,6 +88,7 @@ export default {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)
                 })
+                this.askOrderList.reverse()
             })
             this.$nextTick(() => {
                 this._initScroll() //初始化scroll
@@ -124,6 +125,7 @@ export default {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)
                 })
+                this.askOrderList.reverse()
             }).catch(() => {
                 Dialog.alert({
                     message: '获取列表失败'
@@ -144,10 +146,6 @@ export default {
     bottom: 0rem;
     width: 100%;
     overflow: hidden;
-        .pro_loading {
-            @include cl;
-            top: .1rem;
-        }
         .pro_district {
             background-color: #ffffff;
             display: flex;

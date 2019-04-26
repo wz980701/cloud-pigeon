@@ -5,12 +5,12 @@
                 <li
                 v-for="(item, index) in goods"
                 :key="index"
-                data-stallId="item.stall_id"
+                data-stallId="item.id"
                 @click="menuClick(index, $event)"
                 :class="index == menuIndex ? 'menu-item-selected' : 'menu-item'"
                 >
                 <span class="text">
-                    {{item.stall_name}}
+                    {{item.name}}
                 </span>
                 </li>
             </ul>
@@ -21,10 +21,10 @@
                 v-for="(item, index) in goods"
                 class="food-list food-list-hook"
                 :key="index">
-                    <h1>{{item.stall_name}}</h1>
+                    <h1>{{item.name}}</h1>
                     <ul>
                         <li
-                        v-for="(food, index) in item.foods"
+                        v-for="(food, index) in item.recipe"
                         data-id="food.id"
                         class="food-item"
                         :key="index"
@@ -104,7 +104,7 @@ export default {
         selectFoods () {
             let foods = []
             this.goods.forEach((good) => {
-                good.foods.forEach((food) => {
+                good.recipe.forEach((food) => {
                 if (food.count) {
                     foods.push(food)
                 }

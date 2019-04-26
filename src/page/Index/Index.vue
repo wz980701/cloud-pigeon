@@ -43,19 +43,19 @@ export default {
     },
     methods: {
         getRider () {
-            if (!getLocalStore('rider_token')) {
+            if (!getLocalStore('rider_token')) { //初次登录没有token，则跳到注册页
                 Dialog.alert({
-                    message: '账号已过期，请重新登录'
+                    message: '请先注册账号',
                 })
-                this.$router.push('/riderLogin')
+                this.$router.push('/riderRegist')
             } else {
                     const formdata = new FormData()
-                    formdata.append('role', 'rider'),
+                    formdata.append('role', 'delivery'),
                     formdata.append('token', getLocalStore('rider_token'))
                     this.axios.post('/login', formdata).then((res) => {
                         const data = res.data.data
                         setSessionStore('rider_info', JSON.stringify(data))
-                        if (isEmpty(JSON.parse(getSessionStore('rider_info')))) {
+                        if (isEmpty(JSON.parse(getSessionStore('rider_info')))) { //如果rider_info为空，则重新登录
                             Dialog.alert({
                             message: '账号已过期，请重新登录'
                         })
@@ -73,9 +73,9 @@ export default {
         getStudent () {
             if (!getLocalStore('user_token')) {
                 Dialog.alert({
-                    message: '账号已过期，请重新登录'
+                    message: '请先注册账号'
                 })
-                this.$router.push('/studentLogin')
+                this.$router.push('/studentRegist')
             } else {
                 const formdata = new FormData()
                 formdata.append('role', 'user'),

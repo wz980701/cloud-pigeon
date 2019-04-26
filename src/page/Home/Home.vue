@@ -39,7 +39,7 @@ export default {
         }
     },
     mounted () {
-        this.area = JSON.parse(getSessionStore('user_info')).district
+        this.area = JSON.parse(getSessionStore('user_info')).district //获取用户所在区域
     },
     components: {
         footerBottom

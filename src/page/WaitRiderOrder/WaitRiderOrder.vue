@@ -92,6 +92,7 @@ export default {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)
                 })
+                this.askOrderList.reverse()
             }).catch(() => {
             })
             this.$nextTick(() => {
@@ -125,6 +126,7 @@ export default {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)
                 })
+                this.askOrderList.reverse()
             }).catch(() => {
                 Dialog.alert({
                     message: '获取列表失败'

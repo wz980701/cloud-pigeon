@@ -59,8 +59,8 @@ export default {
     name: 'AskOrder',
     data () {
         return {
-            isInit: false,
-            isLoading: false,
+            isInit: false, //初始list刷新
+            isLoading: false, //下拉刷新
             askOrderList: [],
             districtList: [
                 { text: '全部', active: true, district: '' },
@@ -68,13 +68,13 @@ export default {
                 { text: '北区', active: false, district: '北区' },
                 { text: '南区', active: false, district: '南区' }
             ],
-            params: null,
+            params: null, //下拉刷新时所传参数
             websocket: null,
-            scroll: 0
+            scroll: 0 //初始化scroll
         }
     },
     activated() {
-        this.$refs.aro_page.scrollTop = this.scroll
+        this.$refs.aro_page.scrollTop = this.scroll //进入订单详情页后返回可定位到上次浏览位置
     },
     created () {
         this._initWebsocket()
@@ -189,10 +189,10 @@ export default {
                 return
             })
         },
-        _sendWebsocket (index) {
+        _sendWebsocket (index) { //接单时send websocket
             this.websocket.send('{"url":"/order/delivery","serial_id":'+ this.askOrderList[index].serial_id +',"deliveryphone":"15014348414"}')
         },
-        ToActive (list, index) {
+        ToActive (list, index) { //点击导航栏时显示active位置
             this._getList(this.districtList[index].district)
             list.forEach((item) => {
                 item.active = false
@@ -200,12 +200,12 @@ export default {
             list[index].active = true
         },
         _getList (district) {
-            if (district == "") {
+            if (district == "") { //如果传入district为空，则获取全部订单
                 this.params = {
                     status: '未接单'
                 }
             } else {
-                this.params = {
+                this.params = { //如果传入district不为空，则获取当前区域订单
                     status: '未接单',
                     district: district
                 }
@@ -218,7 +218,7 @@ export default {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)
                 })
-                this.askOrderList.reverse()
+                this.askOrderList.reverse() //反转订单
             }).catch(() => {
                 Dialog.alert({
                     message: '获取列表失败'
