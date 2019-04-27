@@ -1,9 +1,6 @@
 <template>
     <div>
-        <router-link class="h_head" to="/my" tag="div">
-            <i class="iconfont icon-l_arrow"></i>
-            <p>帮助与反馈</p>
-        </router-link>
+        <head-top goBack="帮助与反馈"></head-top>
         <textarea
         placeholder="say something~"
         class="content"
@@ -12,9 +9,14 @@
     </div>
 </template>
 <script>
+import headTop from 'components/Header/Header.vue'
+
 export default {
     name: 'Help',
     methods: {
+    },
+    components: {
+        headTop
     }
 }
 </script>

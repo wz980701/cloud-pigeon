@@ -1,8 +1,6 @@
 <template>
     <div class="o_page">
-        <header class="o_head">
-            我的订单
-        </header>
+        <head-top center="我的订单"></head-top>
         <div class="o_tab">
             <div
             class="o_tab-item"
@@ -24,6 +22,7 @@
 </template>
 <script>
 import footerBottom from 'components/Footer/Footer.vue'
+import headTop from 'components/Header/Header.vue'
 
 export default {
     name: 'Order',
@@ -47,7 +46,8 @@ export default {
         }
     },
     components: {
-        footerBottom
+        footerBottom,
+        headTop
     }
 }
 </script>
@@ -57,13 +57,13 @@ export default {
 .o_page {
     background-color: $background-color;
     height: 100%;
-    .o_head {
-        @include wh(100%, .5rem);
-        line-height: .5rem;
-        text-align: center;
-        color: $font-color;
-        background-color: $theme-color;
-    }
+    // .o_head {
+    //     @include wh(100%, .5rem);
+    //     line-height: .5rem;
+    //     text-align: center;
+    //     color: $font-color;
+    //     background-color: $theme-color;
+    // }
     .o_tab {
         background-color: #ffffff;
         display: flex;

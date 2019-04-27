@@ -1,8 +1,6 @@
 <template>
     <div class="c_page">
-        <router-link class="c_head" to="/my" tag="div">
-            <i class="iconfont icon-l_arrow"></i>
-        </router-link>
+        <head-top goBack=" "></head-top>
         <section class="c_logo">
             <img src="../../common/images/logo.png" alt="logo">
         </section>
@@ -11,8 +9,13 @@
     </div>
 </template>
 <script>
+import headTop from 'components/Header/Header.vue'
+
 export default {
-    name: 'Contact'
+    name: 'Contact',
+    components: {
+        headTop
+    }
 }
 </script>
 <style lang="scss" scoped>

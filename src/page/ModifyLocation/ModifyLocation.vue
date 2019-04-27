@@ -1,9 +1,6 @@
 <template>
     <div class="ml_page">
-        <router-link class="ml_head" to="/my" tag="div">
-            <i class="iconfont icon-l_arrow"></i>
-            <p>配送地址修改</p>
-        </router-link>
+        <head-top goBack="配送地址修改"></head-top>
         <div class="ml_location">
             <label>配送地址:</label>
             <input
@@ -32,6 +29,7 @@
 <script>
 import { Dialog } from 'vant'
 import { setSessionStore, getSessionStore } from 'js/common.js'
+import headTop from 'components/Header/Header.vue'
 
 export default {
     name: 'ModifyLocation',
@@ -64,6 +62,9 @@ export default {
                 })
             })
         }
+    },
+    components: {
+        headTop
     }
 }
 </script>

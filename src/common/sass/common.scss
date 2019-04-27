@@ -100,3 +100,10 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.fixTop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}

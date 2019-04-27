@@ -13,5 +13,6 @@ module.exports = {
             .set('images', resolve('src/common/images'))
             .set('icon', resolve('src/common/icon'))
             .set('components', resolve('src/common/components'))
-    }
+    },
+    
 }

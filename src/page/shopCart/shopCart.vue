@@ -75,7 +75,7 @@
 import cartcontrol from '../cartcontrol/carcontrol'
 import BScroll from 'better-scroll'
 import { Dialog } from 'vant'
-import { getSessionStore } from 'js/common.js'
+import { getSessionStore, getFormdata } from 'js/common.js'
 
 export default {
     props: {
@@ -285,7 +285,7 @@ export default {
                         formdata.append('fee', 0)
                         this.axios.post('/order/generate_wx', formdata).then((res) => {
                             const data = res.data.data
-                            this.callpay (data)
+                            this.callpay (data.jsApiParameters, data.out_trade_no)
                         }).catch(() => {
                             Dialog.alert({
                                 message: '下单失败'
@@ -296,30 +296,38 @@ export default {
                     })
                 }
             },
-            jsApiCall (params)
+            jsApiCall (params, id)
             {
                 WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     params,
-                    function(){
-                        Dialog.alert({
-                            message: '下单成功'
+                    function () {
+                        this.axios.get('/wx/check', {
+                            params: {
+                                out_trade_no: id
+                            }
+                        }).then(() => {
+                            Dialog.alert({
+                                message: '下单成功'
+                            })
+                            this.$router.push('/order')
+                        }).catch((err) => {
+                            console.log(err)
                         })
-                        this.$router.push('/order')
                     }
                 );
             },
-            callpay (params)
+            callpay (params, id)
             {
-                if (typeof WeixinJSBridge == "undefined"){
+                if (typeof WeixinJSBridge === "undefined") {
                     if( document.addEventListener ){
-                        document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(params), false);
+                        document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(params, id), false);
                     }else if (document.attachEvent){
-                        document.attachEvent('WeixinJSBridgeReady', this.jsApiCall(params));
-                        document.attachEvent('onWeixinJSBridgeReady', this.jsApiCall(params));
+                        document.attachEvent('WeixinJSBridgeReady', this.jsApiCall(params, id));
+                        document.attachEvent('onWeixinJSBridgeReady', this.jsApiCall(params, id));
                     }
                 }else{
-                    this.jsApiCall(params);
+                    this.jsApiCall(params, id);
                 }
             }
     },

@@ -1,9 +1,6 @@
 <template>
     <div class="od_page">
-        <router-link class="od_head" to="/askOrder" tag="div">
-            <i class="iconfont icon-l_arrow"></i>
-            <p>订单详情</p>
-        </router-link>
+        <head-top goBack="订单详情" class="od_head"></head-top>
             <section class="od_food">
                 <p class="head">
                     四饭
@@ -103,6 +100,7 @@
 <script>
 import { getSessionStore, timestampToTime } from 'js/common.js'
 import { Dialog } from 'vant'
+import headTop from 'components/Header/Header.vue'
 
 export default {
     name: 'OrderDetail',
@@ -126,6 +124,9 @@ export default {
                 message: '获取订单详情失败'
             })
         })
+    },
+    components: {
+        headTop
     }
 }
 </script>
@@ -138,20 +139,9 @@ export default {
     padding-bottom: .2rem;
     min-height: 100%;
     .od_head {
-        @include wh(100%, .5rem);
-        display: flex;
-        line-height: .5rem;
-        background-color: $theme-color;
-        color: #ffffff;
         position: fixed;
         top: 0;
         z-index: 1;
-        .iconfont {
-            margin-left: .1rem;
-        }
-        p {
-            margin-left: .2rem;
-        }
     }
         .od_food {
             @include wm(80%);

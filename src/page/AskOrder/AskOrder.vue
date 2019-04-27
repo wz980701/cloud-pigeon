@@ -107,7 +107,7 @@ export default {
             }, 500)
         },
         ToDetail (index) { //订单详情
-            setSessionStore('order_id', this.askOrderList[index].order_id)
+            setSessionStore('order_id', this.askOrderList[index].serial_id)
             this.$router.push('/orderDetail')
         },
         ToCancel (index) { //取消订单
