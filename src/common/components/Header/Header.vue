@@ -1,5 +1,6 @@
 <template>
     <header class="head">
+        <slot name="exit"></slot>
         <section class="head_center" v-if="center">
             {{center}}
         </section>

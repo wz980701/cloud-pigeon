@@ -1,9 +1,11 @@
 <template>
     <div class="ro_page">
-        <header class="ro_head">
-            我的订单
-            <i class="iconfont icon-quit" @click="ToExit"></i>
-        </header>
+        <head-top center="我的订单" class="ro_head">
+            <i
+            slot="exit"
+            class="iconfont icon-quit"
+            @click="ToExit"></i>
+        </head-top>
         <div class="ro_tab">
             <div
             class="ro_tab-item"
@@ -24,6 +26,7 @@
 </template>
 <script>
 import { Dialog } from 'vant'
+import headTop from 'components/Header/Header.vue'
 
 export default {
     name: 'Order',
@@ -58,6 +61,9 @@ export default {
                 return
             })
         }
+    },
+    components: {
+        headTop
     }
 }
 </script>
@@ -68,11 +74,6 @@ export default {
     background-color: $background-color;
     height: 100%;
     .ro_head {
-        @include wh(100%, .5rem);
-        line-height: .5rem;
-        text-align: center;
-        color: $font-color;
-        background-color: $theme-color;
         position: relative;
         .iconfont {
             font-size: .2rem;

@@ -22,7 +22,6 @@ import OrderDetail from '../page/OrderDetail/OrderDetail.vue'
 import Goods from '../page/Goods/Goods.vue'
 import Help from '../page/Help/Help.vue'
 import Contact from '../page/Contact/Contact.vue'
-import RiderOrderDetail from '../page/RiderOrderDetail/RiderOrderDetail.vue'
 import Pay from '../page/Pay/Pay.vue'
 
 Vue.use(VueRouter)
@@ -144,7 +143,7 @@ export default new VueRouter({
         },
         {
             path: '/riderOrderDetail',
-            component: RiderOrderDetail
+            component: OrderDetail
         },
         {
             path: '/pay',

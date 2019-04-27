@@ -75,7 +75,7 @@
 import cartcontrol from '../cartcontrol/carcontrol'
 import BScroll from 'better-scroll'
 import { Dialog } from 'vant'
-import { getSessionStore, getFormdata } from 'js/common.js'
+import { getSessionStore } from 'js/common.js'
 
 export default {
     props: {
