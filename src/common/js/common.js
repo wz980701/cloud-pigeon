@@ -1,3 +1,4 @@
+import Vue from 'vue'
 
 export function RouteTo (route) { //跳转页面
     this.$router.push(route)
@@ -90,7 +91,17 @@ export function getFormdata (data) {    //获取formdata
     return formdata
 }
 
-export function getSerialId (time, id) {
+export function getSerialId (time, id) {    //获取拼接后的订单ID，用于微信
     return (100000000000000 + id) + "" + time
 }
+
+export function get (url, params = {}) {    //发起get请求
+    return Vue.axios.get(url, { params })
+}
+
+export function post (url, formdata) {  //发起post请求
+    return Vue.axios.post(url, formdata)
+}
+
+
 

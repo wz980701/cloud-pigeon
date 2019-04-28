@@ -29,6 +29,7 @@
 <script>
 import { Dialog } from 'vant'
 import { setSessionStore, getSessionStore } from 'js/common.js'
+import { changeAddress } from 'js/api.js'
 import headTop from 'components/Header/Header.vue'
 
 export default {
@@ -45,9 +46,7 @@ export default {
                 building: this.building,
                 dorm: this.dorm
             }
-            this.axios.get('/user/changeAddress', {
-                params
-            }).then((res) => {
+            changeAddress(params).then((res) => {
                 const data = res.data.data
                 const oldUserInfo = JSON.parse(getSessionStore('user_info'))
                 const newUserInfo = Object.assign(oldUserInfo, data)

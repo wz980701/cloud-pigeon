@@ -26,6 +26,7 @@
 </template>
 <script>
 import { Dialog } from 'vant'
+import { logout } from 'js/api.js'
 import headTop from 'components/Header/Header.vue'
 
 export default {
@@ -51,7 +52,7 @@ export default {
             Dialog.confirm({
                 message: '确认退出登录吗？'
             }).then(() => {
-                this.axios.get('/logout').catch(() => {
+                logout().catch(() => {
                     Dialog.alert({
                         message: '退出登录失败'
                     })

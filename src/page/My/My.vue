@@ -9,14 +9,20 @@
             </div>
             <div class="content">
                 <p class="userName">{{userName}}</p>
-                <router-link
+                <!-- <router-link
                 to="/userInfo"
                 tag="div"
                 class="userInfo"
                 >
                 个人信息
                 <i class="iconfont icon-r_arrow"></i>
-                </router-link>
+                </router-link> -->
+                <div
+                class="userInfo"
+                >
+                个人信息
+                <i class="iconfont icon-r_arrow"></i>
+                </div>
             </div>
         </section>
         <ul class="m_list">
@@ -36,6 +42,7 @@
 <script>
 import footerBottom from 'components/Footer/Footer.vue'
 import { Dialog } from 'vant'
+import { logout } from 'js/api.js'
 import { getSessionStore } from 'js/common.js'
 
 export default {
@@ -69,7 +76,7 @@ export default {
                 Dialog.confirm({
                     message: '确认退出登录吗？'
                 }).then(() => {
-                    this.axios.get('/logout').catch(() => {
+                    logout().catch(() => {
                         Dialog.alert({
                             message: '退出登录失败'
                         })

@@ -50,6 +50,7 @@
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { orderList } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
 Vue.use(PullRefresh)
@@ -102,9 +103,7 @@ export default {
             setTimeout(() => {
                 this.$toast('刷新成功');
                 this.isLoading = false;
-                this.axios.get('/order/refresh', {
-                    params: this.params
-                }).then((res) => {
+                orderList(this.params).then((res) => {
                 this.askOrderList = res.data.data
                 this.askOrderList.forEach((item) => {
                     item.timestamp = item.created_at
@@ -210,9 +209,7 @@ export default {
                     district: district
                 }
             }
-            this.axios.get('order/refresh', {
-                params: this.params
-            }).then((res) => {
+            orderList(this.params).then((res) => {
                 this.askOrderList = res.data.data
                 this.askOrderList.forEach((item) => {
                     item.timestamp = item.created_at

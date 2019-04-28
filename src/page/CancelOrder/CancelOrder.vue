@@ -30,6 +30,7 @@
 import BScroll from 'better-scroll'
 import Vue from 'vue'
 import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { orderList } from 'js/api.js'
 import { PullRefresh, Loading } from 'vant'
 
 Vue.use(PullRefresh)
@@ -41,15 +42,15 @@ export default {
         return {
             isInit: false,
             isLoading: false,
-            cancelOrderList: []
+            cancelOrderList: [],
+            params: null
         }
     },
     created () {
-            this.axios.get('/order/refresh', {
-                params: {
-                    status: '已取消'
-                }
-            }).then((res) => {
+            this.params = {
+                status: '已取消'
+            }
+            orderList(this.params).then((res) => {
                 this.cancelOrderList = res.data.data.reverse()
                 this.cancelOrderList.forEach((item) => {
                     item.timestamp = item.created_at
@@ -71,11 +72,7 @@ export default {
             setTimeout(() => {
                 this.$toast('刷新成功');
                 this.isLoading = false;
-                this.axios.get('/order/refresh', {
-                    params: {
-                        status: '已取消'
-                    }
-                }).then((res) => {
+                orderList(this.params).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)

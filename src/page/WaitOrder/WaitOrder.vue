@@ -38,6 +38,7 @@
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import { RouteTo, timestampToTime, timestampToExpectedTime, setSessionStore } from 'js/common.js'
+import { orderList, confirm } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
 Vue.use(PullRefresh)
@@ -49,15 +50,15 @@ export default {
         return {
             isInit: false,
             isLoading: false,
-            allOrderList: []
+            allOrderList: [],
+            params: null
         }
     },
     created () {
-            this.axios.get('/order/refresh', {
-                params: {
-                    status: '已接单'
-                }
-            }).then((res) => {
+            this.params = {
+                status: '已接单'
+            }
+            orderList(this.params).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
                     item.time = timestampToExpectedTime(item.created_at)
@@ -84,11 +85,7 @@ export default {
             setTimeout(() => {
                 this.$toast('刷新成功');
                 this.isLoading = false;
-                this.axios.get('/order/refresh', {
-                    params: {
-                        status: '已接单'
-                    }
-                }).then((res) => {
+                orderList(this.params).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
                     item.time = timestampToExpectedTime(item.created_at)
@@ -113,11 +110,10 @@ export default {
             Dialog.confirm({
                 message: '确认已送达吗？'
             }).then(() => {
-                this.axios.get('/order/confirm', {
-                    params: {
-                        serial_id: this.allOrderList[index].serial_id
-                    }
-                }).then(() => {
+                const params = {
+                    serial_id: this.allOrderList[index].serial_id
+                }
+                confirm(params).then(() => {
                     Dialog.alert({
                         message: '确认成功'
                     })

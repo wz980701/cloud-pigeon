@@ -37,6 +37,7 @@
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import { RouteTo, timestampToTime, setSessionStore, getSerialId } from 'js/common.js'
+import { orderList, cancel } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
 Vue.use(PullRefresh)
@@ -49,16 +50,16 @@ export default {
             isInit: false, //初次获取List刷新
             isLoading: false, //下拉刷新
             askOrderList: [],
-            websocket: null
+            websocket: null,
+            params: null
         }
     },
     created () {
             this._initWebsocket()
-            this.axios.get('/order/refresh', {
-                params: {
-                    status: '未接单'
-                }
-            }).then((res) => {
+            this.params = {
+                status: '未接单'
+            }
+            orderList(this.params).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
                     item.order_id = getSerialId(item.timestamp, item.serial_id)
@@ -88,11 +89,7 @@ export default {
             setTimeout(() => {
                 this.$toast('刷新成功');
                 this.isLoading = false;
-                this.axios.get('/order/refresh', {
-                    params: {
-                        status: '未接单'
-                    }
-                }).then((res) => {
+                orderList(this.params).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
                     item.created_at = timestampToTime(item.created_at)
@@ -114,11 +111,10 @@ export default {
             Dialog.confirm({
                 message: '确认要取消订单吗？'
             }).then(() => {
-                this.axios.get('/order/cancel', {
-                    params: {
-                        serial_id: this.askOrderList[index].serial_id
-                    }
-                }).then(() => {
+                const params = {
+                    serial_id: this.askOrderList[index].serial_id
+                }
+                cancel(params).then(() => {
                     this.askOrderList.splice(index, 1)
                     Dialog.alert({
                         message: '取消订单成功'

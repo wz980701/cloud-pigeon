@@ -29,6 +29,7 @@
 </template>
 <script>
 import { getLocalStore, setSessionStore, getSessionStore, isEmpty } from 'js/common.js'
+import { login } from 'js/api.js'
 import { Dialog } from 'vant'
 
 export default {
@@ -52,7 +53,7 @@ export default {
                     const formdata = new FormData()
                     formdata.append('role', 'delivery'),
                     formdata.append('token', getLocalStore('rider_token'))
-                    this.axios.post('/login', formdata).then((res) => {
+                    login(formdata).then((res) => {
                         const data = res.data.data
                         setSessionStore('rider_info', JSON.stringify(data))
                         if (isEmpty(JSON.parse(getSessionStore('rider_info')))) { //如果rider_info为空，则重新登录
@@ -80,7 +81,7 @@ export default {
                 const formdata = new FormData()
                 formdata.append('role', 'user'),
                 formdata.append('token', getLocalStore('user_token'))
-                this.axios.post('/login', formdata).then((res) => {
+                login(formdata).then((res) => {
                     const data = res.data.data
                     setSessionStore('user_info', JSON.stringify(data))
                     if (isEmpty(JSON.parse(getSessionStore('user_info')))) {

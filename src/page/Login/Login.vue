@@ -74,8 +74,9 @@
 </template>
 <script>
 import { Dialog } from 'vant'
-import { minLength, maxLength, numeric } from 'vuelidate/lib/validators'
+import { minLength, maxLength, numeric, required } from 'vuelidate/lib/validators'
 import { setSessionStore, setLocalStore, getFormdata } from 'js/common.js'
+import { login } from 'js/api.js'
 
 export default {
     name: 'StudentLogin',
@@ -95,15 +96,17 @@ export default {
             phone: {
                 minLength: minLength(11),
                 maxLength: maxLength(11),
-                numeric
+                numeric,
+                required
             },
             password: {
-                minLength: minLength(6)
+                minLength: minLength(6),
+                required
             }
         }
     },
     created () {
-        if (this.$route.path.split('/')[1] !== 'studentLogin') {
+        if (this.$route.path.split('/')[1] !== 'studentLogin') {    //判断是用户登录还是骑手登录
             this.formdata.role = 'delivery'
             this.path = '/riderOrder'
         }
@@ -113,12 +116,28 @@ export default {
     },
     methods: {
         ToLogin () {
-            this.axios.post('/login', getFormdata(this.formdata)).then((res) => {
+            if (this.$v.$invalid) { //如果没按要求格式填写，则报错
+                Dialog.alert({
+                    message: '请正确填写账号密码'
+                })
+            } else {
+                const formdata = getFormdata(this.formdata)
+                login(formdata).then((res) => {
+                    this.getRes(res)
+                }).catch(() => {
+                    this.getFail()
+                })
+            }
+        },
+        getRes (res) {
+            const code = res.data.code
+            if (code !== 0) {   //当code不为0，即登录不成功时，报错
+                Dialog.alert({
+                    message: '账号或密码有误'
+                })
+            } else {
                 this.getSuc(res)
-            }).catch((err) => {
-                // console.log(err)
-                this.getFail()
-            })
+            }
         },
         getSuc (res) {
             const data = res.data.data

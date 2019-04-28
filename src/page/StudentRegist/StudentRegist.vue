@@ -31,29 +31,6 @@
                     * 请输入真实姓名
                     </span>
                     <input
-                    v-model.trim="$v.formdata.sid.$model"
-                    type="text"
-                    class="sg_studentNum"
-                    placeholder="请输入学号">
-                    <span
-                    v-if="!$v.formdata.sid.required"
-                    class="form-group_message"
-                    >
-                    * 必须输入学号
-                    </span>
-                    <span
-                    v-if="!$v.formdata.sid.minLength"
-                    class="form-group_message"
-                    >
-                    * 学号为10位
-                    </span>
-                    <span
-                    v-if="!$v.formdata.sid.maxLength"
-                    class="form-group_message"
-                    >
-                    * 学号为10位
-                    </span>
-                    <input
                     v-model.trim="$v.formdata.phone.$model"
                     type="text"
                     class="sg_phone"
@@ -149,6 +126,7 @@
 <script>
 import { Dialog } from 'vant'
 import { setLocalStore, getLocalStore, setSessionStore, getFormdata } from 'js/common.js'
+import { regist, login } from 'js/api.js'
 import { required, minLength, maxLength, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 
 export default {
@@ -160,7 +138,6 @@ export default {
                 phone: '',
                 password: '',
                 studentName: '',
-                sid: '',
                 role: 'user',
                 building: '',
                 dorm: ''
@@ -173,11 +150,6 @@ export default {
             name: {
                 required,
                 minLength: minLength(2)
-            },
-            sid: {
-                required,
-                minLength: minLength(10),
-                maxLength: maxLength(10)
             },
             phone: {
                 minLength: minLength(11),
@@ -208,11 +180,22 @@ export default {
             if (this.$v.$invalid) {
                 this.ToRemind('请正确填写信息')
             } else {
-                this.axios.post('/register', getFormdata(this.formdata)).then((res) => {
-                    this.getSuc(res)
+                const formdata = getFormdata(this.formdata)
+                regist(formdata).then((res) => {
+                    this.getRes(res)
                 }).catch(() => {
                     this.getFail()
                 })
+            }
+        },
+        getRes (res) {
+            const code = res.data.code
+            if (code !== 0) {
+                Dialog.alert({
+                    message: '该手机号已被注册'
+                })
+            } else {
+                this.getSuc(res)
             }
         },
         getSuc (res) {
@@ -232,8 +215,8 @@ export default {
         ToLogin () {
             const formdata = new FormData()
             formdata.append('token', getLocalStore('user_token'))
-            formdata.append('role', this.role)
-            this.axios.post('/login', formdata).then((res) => {
+            formdata.append('role', this.formdata.role)
+            login(formdata).then((res) => {
                 const data = res.data.data
                 setSessionStore('user_info', JSON.stringify(data))
                 this.$router.push('/home')

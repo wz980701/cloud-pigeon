@@ -65,6 +65,7 @@ import shopCart from '../shopCart/shopCart'
 import cartcontrol from '../cartcontrol/carcontrol'
 import { Dialog } from 'vant'
 import { getSessionStore, setSessionStore } from 'js/common.js'
+import { foodList } from 'js/api.js'
 
 export default {
     name: 'Goods',
@@ -80,7 +81,7 @@ export default {
     },
     created () {
         if (!JSON.parse(getSessionStore('good_list'))) {
-            this.axios.get('/recipe/all').then((res) => {
+            foodList().then((res) => {
             this.goods = [...res.data.data]
             setSessionStore('good_list', JSON.stringify(this.goods))
             this.$nextTick(() => {

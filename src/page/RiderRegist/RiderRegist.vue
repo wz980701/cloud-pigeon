@@ -97,6 +97,7 @@
 import { Dialog } from 'vant'
 import { required, minLength, maxLength, numeric } from 'vuelidate/lib/validators'
 import { getFormdata } from 'js/common.js'
+import { regist } from 'js/api.js'
 
 export default {
     name: 'RiderRegist',
@@ -141,11 +142,22 @@ export default {
             if (this.$v.$invalid) {
                 this.ToRemind('请正确填写信息')
             } else {
-                this.axios.post('/register', getFormdata(this.formdata)).then(() => {
-                    this.getSuc()
+                const formdata = getFormdata(this.formdata)
+                regist(formdata).then((res) => {
+                    this.getRes(res)
                 }).catch(() => {
                     this.getFail()
                 })
+            }
+        },
+        getRes (res) {
+            const code = res.data.code
+            if (code !== 0) {
+                Dialog.alert({
+                    message: '该手机号已被注册'
+                })
+            } else {
+                this.getSuc()
             }
         },
         getSuc () {

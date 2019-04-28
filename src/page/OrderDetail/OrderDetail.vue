@@ -99,6 +99,7 @@
 </template>
 <script>
 import { getSessionStore, timestampToTime } from 'js/common.js'
+import { orderDetail } from 'js/api.js'
 import { Dialog } from 'vant'
 import headTop from 'components/Header/Header.vue'
 
@@ -110,11 +111,10 @@ export default {
         }
     },
     created () {
-        this.axios.get('/order/detail', {
-            params: {
-                serial_id: getSessionStore('order_id')
-            }
-        }).then((res) => {
+        const params = {
+            serial_id: getSessionStore('order_id')
+        }
+        orderDetail(params).then((res) => {
             res.data.data.timestamp = res.data.data.created_at
             res.data.data.created_at = timestampToTime(res.data.data.created_at)
             res.data.data.numberlist = JSON.parse(res.data.data.numberlist) //将json数组转化为js数组

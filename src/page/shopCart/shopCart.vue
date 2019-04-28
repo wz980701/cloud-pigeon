@@ -76,6 +76,7 @@ import cartcontrol from '../cartcontrol/carcontrol'
 import BScroll from 'better-scroll'
 import { Dialog } from 'vant'
 import { getSessionStore } from 'js/common.js'
+import { generate, checkWx } from 'js/api.js'
 
 export default {
     props: {
@@ -275,16 +276,18 @@ export default {
                         const formdata = new FormData()
                         formdata.append('foodlist', JSON.stringify(idlist))
                         formdata.append('numberlist', JSON.stringify(countlist))
-                        // formdata.append('money', this.totalPrice + this.deliveryPrice)
-                        formdata.append('money', 0.01)
+                        formdata.append('money', this.totalPrice)
                         formdata.append('district', info.district)
                         formdata.append('dormtype', info.dormtype)
                         formdata.append('building', info.building)
                         formdata.append('dorm', info.dorm)
                         formdata.append('userphone', info.phone)
-                        formdata.append('fee', 0)
-                        this.axios.post('/order/generate_wx', formdata).then((res) => {
+                        formdata.append('fee', this.deliveryPrice)
+                        generate(formdata).then((res) => {
                             const data = res.data.data
+                            console.log(res)
+                            console.log(data.jsApiParameters)
+                            console.log(data.out_trade_no)
                             this.callpay (data.jsApiParameters, data.out_trade_no)
                         }).catch(() => {
                             Dialog.alert({
@@ -302,11 +305,11 @@ export default {
                     'getBrandWCPayRequest',
                     params,
                     function () {
-                        this.axios.get('/wx/check', {
-                            params: {
-                                out_trade_no: id
-                            }
-                        }).then(() => {
+                        const param = {
+                            out_trade_no: id
+                        }
+                        checkWx(param).then((res) => {
+                            console.log(res)
                             Dialog.alert({
                                 message: '下单成功'
                             })
