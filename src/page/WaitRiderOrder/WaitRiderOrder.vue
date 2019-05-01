@@ -42,7 +42,7 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { RouteTo, setSessionStore, getSessionStore, webCloseLink, _initList } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -66,6 +66,7 @@ export default {
         }
     },
     created () {
+        this._initWebsocket()
         this._getList(this.districtList[0].district)
         this.$nextTick(() => {
             this._initScroll() //初始化scroll
@@ -77,6 +78,30 @@ export default {
                 click: true
             })
         },
+        _initWebsocket () { //初始化webpack
+            const wsServer = 'ws://101.132.181.245:9501';
+            this.websocket = new WebSocket(wsServer);
+            this.websocket.onopen = () => {
+                webCloseLink(this.websocket)
+            };
+            this.websocket.onclose = () => {
+                console.log("Disconnected");
+            };
+            this.websocket.onmessage = (evt) => { //若有webpack推送数据，则增加数据
+                const data = JSON.parse(evt.data)
+                this.getDelivery(data)
+                console.log('Retrieved data from server: ' + data.message);
+            };
+            this.websocket.onerror = (evt) => {
+                console.log('Error occured: ' + evt.data);
+            };
+        },
+        getDelivery (data) {
+            if (data.message == "delivery") {
+                const item = JSON.parse(getSessionStore('accept_order'))
+                this.askOrderList.unshift(item)
+            }
+        },
         ToDetail (index) {
             setSessionStore('order_id', this.askOrderList[index].serial_id)
             this.$router.push('/riderOrderDetail')
@@ -86,12 +111,7 @@ export default {
                 this.$toast('刷新成功');
                 this.isLoading = false;
                 orderList(this.params).then((res) => {
-                this.askOrderList = res.data.data
-                this.askOrderList.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.askOrderList.reverse()
+                this.askOrderList = _initList(res)
             }).catch(() => {
             })
             this.$nextTick(() => {
@@ -118,12 +138,7 @@ export default {
                 }
             }
             orderList(this.params).then((res) => {
-                this.askOrderList = res.data.data
-                this.askOrderList.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.askOrderList.reverse()
+                this.askOrderList = _initList(res)
             }).catch(() => {
                 Dialog.alert({
                     message: '获取列表失败'
@@ -171,6 +186,7 @@ export default {
         width: 85%;
         margin: 0 auto;
         margin-top: .2rem;
+        min-height: 5rem;
         .wro_item {
             width: 100%;
             @include borderRadius(5%);

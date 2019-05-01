@@ -76,7 +76,7 @@ export default {
             foodsScrollY: 0,
             selectedFood: '',
             minPrice: 3,
-            menuIndex: 0
+            // menuIndex: 0
         }
     },
     created () {
@@ -102,6 +102,16 @@ export default {
         }
     },
     computed: {
+        menuIndex () {
+            for (let i = 0, l = this.listHeight.length; i < l; i++) {
+                let topHeight = this.listHeight[i]
+                let bottomHeight = this.listHeight[i + 1]
+                if (!bottomHeight || (this.foodsScrollY >= topHeight && this.foodsScrollY < bottomHeight)) {
+                return i
+                }
+            }
+            return 0
+        },
         selectFoods () {
             let foods = []
             this.goods.forEach((good) => {

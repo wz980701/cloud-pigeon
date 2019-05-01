@@ -41,6 +41,7 @@ export default {
     @include wm(80%);
     @include border-1px(#ccc);
     margin-top: .4rem;
+    line-height: .4rem;
     @include borderRadius(.05rem);
     padding-left: .1rem;
 }

@@ -29,7 +29,7 @@
 <script>
 import BScroll from 'better-scroll'
 import Vue from 'vue'
-import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { RouteTo, setSessionStore, _initList } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading } from 'vant'
 
@@ -51,11 +51,7 @@ export default {
             status: '已完成'
         }
         orderList(this.params).then((res) => {
-            this.cancelOrderList = res.data.data.reverse()
-            this.cancelOrderList.forEach((item) => {
-                item.timestamp = item.created_at
-                item.created_at = timestampToTime(item.created_at)
-            })
+            this.cancelOrderList = _initList(res)
             this.isInit = true
         })
         this.$nextTick(() => {
@@ -73,11 +69,7 @@ export default {
                 this.$toast('刷新成功');
                 this.isLoading = false;
                 orderList(this.params).then((res) => {
-                res.data.data.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.cancelOrderList = res.data.data.reverse()
+                this.cancelOrderList = _initList(res)
             }).catch((err) => {
                 alert(err)
             })
@@ -105,6 +97,7 @@ export default {
         .fo_list {
         width: 85%;
         margin: 0 auto;
+        min-height: 5rem;
         .fo_item {
             width: 100%;
             @include borderRadius(5%);

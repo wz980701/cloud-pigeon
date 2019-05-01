@@ -57,6 +57,7 @@ export default {
                         message: '退出登录失败'
                     })
                 })
+                this.ToActive(this.tabList, 0)
                 this.$router.push('/riderLogin')
             }).catch(() => {
                 return

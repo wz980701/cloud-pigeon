@@ -36,7 +36,7 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import { RouteTo, timestampToTime, setSessionStore, getSerialId } from 'js/common.js'
+import { RouteTo, timestampToTime, setSessionStore, getSerialId, webCloseLink } from 'js/common.js'
 import { orderList, cancel } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -60,12 +60,13 @@ export default {
                 status: '未接单'
             }
             orderList(this.params).then((res) => {
-                res.data.data.forEach((item) => {
+                const data = res.data.data
+                data.forEach((item) => {
                     item.timestamp = item.created_at
                     item.order_id = getSerialId(item.timestamp, item.serial_id)
                     item.created_at = timestampToTime(item.created_at)
-                    this.askOrderList.unshift(item)
                 })
+                this.askOrderList = res.data.data
                 this.isInit = true
             }).catch(() => {
                 Dialog.alert({
@@ -92,9 +93,10 @@ export default {
                 orderList(this.params).then((res) => {
                 res.data.data.forEach((item) => {
                     item.timestamp = item.created_at
+                    item.order_id = getSerialId(item.timestamp, item.serial_id)
                     item.created_at = timestampToTime(item.created_at)
-                    this.askOrderList.unshift(item)
                 })
+                this.askOrderList = res.data.data
             }).catch((err) => {
                 alert(err)
             })
@@ -132,54 +134,28 @@ export default {
             const wsServer = 'ws://101.132.181.245:9501';
             this.websocket = new WebSocket(wsServer);
             this.websocket.onopen = () => {
-                this.webCloseLink(this.websocket)
+                webCloseLink(this.websocket)
             };
             this.websocket.onclose = () => {
                 console.log("Disconnected");
             };
             this.websocket.onmessage = (evt) => { //若有webpack推送数据，则增加数据
                 const data = JSON.parse(evt.data)
-                if (data.message == "delivery") {
-                    for (let item of this.askOrderList) {
-                        if (item['serial_id'] == data.id) {
-                            this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
-                        }
-                    }
-                }
+                this.getDelivery(data)
                 console.log('Retrieved data from server: ' + data.message);
             };
             this.websocket.onerror = (evt) => {
                 console.log('Error occured: ' + evt.data);
             };
         },
-        webCloseLink(WebSocketId){
-            WebSocketId.send("心跳包内容")
-            // 每个15秒发送一次心跳包
-            let hb = setInterval(()=>{
-            WebSocketId.send("心跳包内容")
-            // 检测到websocket连接断开
-                if(WebSocketId.readyState == 2 || WebSocketId.readyState == 3){
-                    clearInterval(this.hb)
-                    let i = 1
-                    let myVar = setInterval(()=>{
-                        if(WebSocketId.readyState == 2 || WebSocketId.readyState == 3){
-                            // 重新new一个websocket的连接
-                            this.websocket = new WebSocket(WebSocketId.url);
-                            WebSocketId = this.websocket;
-                            if(i == 5){
-                                clearInterval(myVar);
-                                // location.reload();
-                                    return
-                            }
-                            i++
-                            }   else if(WebSocketId.readyState == 1){ // websocket重连成功
-                                this._initWebsocket();
-                                clearInterval(hb)
-                                clearInterval(myVar)
-                            }
-                        },4*1000)
+        getDelivery (data) {
+            if (data.message == "delivery") {
+                for (let item of this.askOrderList) {
+                    if (item['serial_id'] == data.id) {
+                        this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
                     }
-                }, 15000)
+                }
+            }
         },
         RouteTo: RouteTo
     }
@@ -196,6 +172,7 @@ export default {
         .ao_list {
         width: 85%;
         margin: 0 auto;
+        min-height: 5rem;
         .ao_item {
             width: 100%;
             @include borderRadius(5%);

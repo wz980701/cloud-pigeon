@@ -17,7 +17,7 @@
         <keep-alive>
             <router-view></router-view>
         </keep-alive>
-        <footer-bottom :currentIndex="1"></footer-bottom>
+        <footer-bottom :currentIndex="1" @changeActive="ToActive(0)"></footer-bottom>
     </div>
 </template>
 <script>

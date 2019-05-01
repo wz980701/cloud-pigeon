@@ -42,7 +42,7 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { RouteTo, setSessionStore, _initList } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -82,12 +82,7 @@ export default {
                 this.$toast('刷新成功');
                 this.isLoading = false;
                 orderList(this.params).then((res) => {
-                this.askOrderList = res.data.data
-                this.askOrderList.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.askOrderList.reverse()
+                this.askOrderList = _initList(res)
             })
             this.$nextTick(() => {
                 this._initScroll() //初始化scroll
@@ -117,12 +112,7 @@ export default {
                 }
             }
             orderList(this.params).then((res) => {
-                this.askOrderList = res.data.data
-                this.askOrderList.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.askOrderList.reverse()
+                this.askOrderList = _initList(res)
             }).catch(() => {
                 Dialog.alert({
                     message: '获取列表失败'
@@ -166,6 +156,7 @@ export default {
         width: 85%;
         margin: 0 auto;
         margin-top: .2rem;
+        min-height: 5rem;
         .pro_item {
             width: 100%;
             @include borderRadius(5%);

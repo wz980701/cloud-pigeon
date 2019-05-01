@@ -103,5 +103,13 @@ export function post (url, formdata) {  //发起post请求
     return Vue.axios.post(url, formdata)
 }
 
+export function _initList (res) {   //初始化订单列表数据
+    const data = res.data.data
+    data.forEach((item) => {
+        item.timestamp = item.created_at
+        item.created_at = timestampToTime(item.created_at)
+    })
+    return data
+}
 
 

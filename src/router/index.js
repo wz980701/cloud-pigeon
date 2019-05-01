@@ -63,19 +63,31 @@ export default new VueRouter({
             children: [
                 {
                     path: '/waitOrder',
-                    component: WaitOrder
+                    component: WaitOrder,
+                    meta: {
+                        keepAlive: true
+                    }
                 },
                 {
                     path: '/askOrder',
-                    component: AskOrder
+                    component: AskOrder,
+                    meta: {
+                        keepAlive: true
+                    }
                 },
                 {
                     path: '/cancelOrder',
-                    component: CancelOrder
+                    component: CancelOrder,
+                    meta: {
+                        keepAlive: true
+                    }
                 },
                 {
                     path: '/finishOrder',
-                    component: FinishOrder
+                    component: FinishOrder,
+                    meta: {
+                        keepAlive: true
+                    }
                 }
             ]
         },
@@ -87,13 +99,13 @@ export default new VueRouter({
             path: '/shop',
             component: Shop,
             redirect: '/goods',
+            meta: {
+                keepAlive: true
+            },
             children: [
                 {
                     path: '/goods',
-                    component: Goods,
-                    meta: {
-                        keepAlive: true
-                    }
+                    component: Goods
                 }
             ]
         },

@@ -13,7 +13,13 @@
 
 <script>
 export default {
-  name: 'app'
+	name: 'app',
+	created () {
+		const height = document.documentElement.clientHeight
+		window.onload = () => {
+			document.getElementById('app').style.height = `${height}px`
+		}
+	}
 }
 </script>
 

@@ -8,6 +8,15 @@
             <van-swipe-item>
                 <img src="../../common/images/swiper_2.jpg">
             </van-swipe-item>
+            <van-swipe-item>
+                <img src="../../common/images/swiper_3.jpg">
+            </van-swipe-item>
+            <van-swipe-item>
+                <img src="../../common/images/swiper_4.jpg">
+            </van-swipe-item>
+            <van-swipe-item>
+                <img src="../../common/images/swiper_5.jpg">
+            </van-swipe-item>
         </van-swipe>
         <section class="h_content">
             <router-link to="/shop" class="h_fourth" tag="div">

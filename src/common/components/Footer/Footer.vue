@@ -30,6 +30,9 @@ export default {
     methods: {
         ToActive (index) {
             this.currentIndex = index
+            if (index !== 1) {  //如果订单页跳转到其他页面，则移除订单页标签的active状态
+                this.$emit('changeActive')
+            }
         },
         LinkTo (path) {
             this.$router.push(path)

@@ -64,7 +64,7 @@ export default {
                     item.time = timestampToExpectedTime(item.created_at)
                     item.created_at = timestampToTime(item.created_at)
                 })
-                this.allOrderList = res.data.data.reverse()
+                this.allOrderList = res.data.data
                 this.isInit = true
             }).catch(() => {
                 Dialog.alert({
@@ -91,7 +91,7 @@ export default {
                     item.time = timestampToExpectedTime(item.created_at)
                     item.created_at = timestampToTime(item.created_at)
                 })
-                this.allOrderList = res.data.data.reverse()
+                this.allOrderList = res.data.data
                 setSessionStore('all_list', JSON.stringify(this.allOrderList))
                 this.isInit = true
             }).catch((err) => {
@@ -142,6 +142,7 @@ export default {
         .wo_list {
         width: 85%;
         margin: 0 auto;
+        min-height: 5rem;
         .wo_item {
             position: relative;
             width: 100%;

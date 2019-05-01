@@ -213,6 +213,7 @@ export default {
                 .info {
                     p {
                         margin-bottom: .1rem;
+                        text-align: right;
                     }
                 }
             }

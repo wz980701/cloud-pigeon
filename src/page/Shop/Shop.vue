@@ -13,7 +13,7 @@
                         <span class="name">第四食堂</span>
                     </div>
                     <div class="description">
-                        云鸽专送 / 20分钟送达
+                        云鸽专送 / 30分钟送达
                     </div>
                     <div class="supports">
                         <div class="supports_desc">

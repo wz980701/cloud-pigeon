@@ -49,7 +49,7 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import { RouteTo, timestampToTime, setSessionStore } from 'js/common.js'
+import { RouteTo, timestampToTime, setSessionStore, getSessionStore, webCloseLink, _initList } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -104,12 +104,7 @@ export default {
                 this.$toast('刷新成功');
                 this.isLoading = false;
                 orderList(this.params).then((res) => {
-                this.askOrderList = res.data.data
-                this.askOrderList.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.askOrderList.reverse()
+                    this.askOrderList = _initList(res)
             }).catch(() => {
             })
             this.$nextTick(() => {
@@ -121,7 +116,7 @@ export default {
             const wsServer = 'ws://101.132.181.245:9501';
             this.websocket = new WebSocket(wsServer);
             this.websocket.onopen = () => {
-                this.webCloseLink(this.websocket)
+                webCloseLink(this.websocket)
             };
             this.websocket.onclose = () => {
                 console.log("Disconnected");
@@ -146,35 +141,6 @@ export default {
                 console.log('Error occured: ' + evt.data);
             };
         },
-        webCloseLink(WebSocketId){
-            WebSocketId.send("心跳包内容")
-            // 每个15秒发送一次心跳包
-            let hb = setInterval(()=>{
-            WebSocketId.send("心跳包内容")
-            // 检测到websocket连接断开
-                if(WebSocketId.readyState == 2 || WebSocketId.readyState == 3){
-                    clearInterval(this.hb)
-                    let i = 1
-                    let myVar = setInterval(()=>{
-                        if(WebSocketId.readyState == 2 || WebSocketId.readyState == 3){
-                            // 重新new一个websocket的连接
-                            this.websocket = new WebSocket(WebSocketId.url);
-                            WebSocketId = this.websocket;
-                            if(i == 5){
-                                clearInterval(myVar);
-                                // location.reload();
-                                    return
-                            }
-                            i++
-                            }   else if(WebSocketId.readyState == 1){ // websocket重连成功
-                                this._initWebsocket();
-                                clearInterval(hb)
-                                clearInterval(myVar)
-                            }
-                        },4*1000)
-                    }
-                }, 15000)
-        },
         ToAccept (index) {  //接收订单
             Dialog.confirm({
                 message: '确定要接下该单吗？'
@@ -183,13 +149,20 @@ export default {
                     message: '接单成功'
                 })
                 this._sendWebsocket(index)
+                this.saveOrder(index)
                 this.askOrderList.splice(index, 1)
             }).catch(() => {
                 return
             })
         },
+        saveOrder (index) {
+            const data = JSON.stringify(this.askOrderList[index])
+            setSessionStore('accept_order', data)
+        },
         _sendWebsocket (index) { //接单时send websocket
-            this.websocket.send('{"url":"/order/delivery","serial_id":'+ this.askOrderList[index].serial_id +',"deliveryphone":"15014348414"}')
+            const serial_id = this.askOrderList[index].serial_id
+            const phone = JSON.parse(getSessionStore('rider_info')).phone
+            this.websocket.send('{"url":"/order/delivery","serial_id":'+ serial_id +',"deliveryphone": '+ phone +'}')
         },
         ToActive (list, index) { //点击导航栏时显示active位置
             this._getList(this.districtList[index].district)
@@ -210,12 +183,7 @@ export default {
                 }
             }
             orderList(this.params).then((res) => {
-                this.askOrderList = res.data.data
-                this.askOrderList.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.askOrderList.reverse() //反转订单
+                this.askOrderList = _initList(res)
             }).catch(() => {
                 Dialog.alert({
                     message: '获取列表失败'
@@ -259,6 +227,7 @@ export default {
         width: 85%;
         margin: 0 auto;
         margin-top: .2rem;
+        min-height: 5rem;
         .aro_item {
             width: 100%;
             @include borderRadius(5%);

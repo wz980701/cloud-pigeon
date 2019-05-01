@@ -5,7 +5,8 @@
             <img src="../../common/images/logo.png" alt="logo">
         </section>
         <h2 class="c_name">云鸽校园</h2>
-        <p class="c_email">联系邮箱：<span>Ygxyfwtd@126.com</span></p>
+        <p class="c_text">联系邮箱：<span>Ygxyfwtd@126.com</span></p>
+        <p class="c_text">微信：<span>Skr_003</span></p>
     </div>
 </template>
 <script>
@@ -50,9 +51,9 @@ export default {
     }
     .c_name {
         color: #333;
+        margin-bottom: .3rem;
     }
-    .c_email {
-        margin-top: .3rem;
+    .c_text {
         font-size: .14rem;
         box-sizing: border-box;
         width: 100%;
@@ -60,6 +61,7 @@ export default {
         background-color: #ffffff;
         @include fj;
         padding: 0 .1rem;
+        border-bottom: 1px solid #f2f3f4;
     }
 }
 </style>
