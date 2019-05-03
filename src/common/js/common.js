@@ -107,9 +107,13 @@ export function _initList (res) {   //初始化订单列表数据
     const data = res.data.data
     data.forEach((item) => {
         item.timestamp = item.created_at
+        if (item.status === '未接单') {
+            item.order_id = getSerialId(item.timestamp, item.serial_id)
+        } else if (item.status === '已接单') {
+            item.time = timestampToExpectedTime(item.created_at)
+        }
         item.created_at = timestampToTime(item.created_at)
     })
     return data
 }
-
 

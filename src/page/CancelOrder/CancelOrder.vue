@@ -4,23 +4,12 @@
                 <van-loading v-show="!isInit" class="ao_loading"></van-loading>
                 <ul class="co_list" ref="co_list">
                 <li
-                class="co_item"
+                is="orderItem"
                 v-for="(item, index) in cancelOrderList"
                 :key="index"
-                @click="ToDetail(index)"
+                :data="item"
+                cancel="已取消"
                 >
-                    <div class="item_head">
-                        <div class="img_wrapper">
-                            <img src="../../common/images/head.jpg" alt="dinning_room">
-                        </div>
-                        <p class="order_id">订单编号：{{item.timestamp + "" + item.serial_id}}</p>
-                    </div>
-                    <div class="item_line"></div>
-                    <div class="item_content">
-                        <p class="time">下单时间：{{item.created_at}}</p>
-                        <p class="location">地址：{{item.district + item.dormtype + item.building + '栋' + item.dorm}}</p>
-                        <p class="cancel_btn">已取消</p>
-                    </div>
                 </li>
             </ul>
         </van-pull-refresh>
@@ -29,6 +18,7 @@
 <script>
 import BScroll from 'better-scroll'
 import Vue from 'vue'
+import orderItem from 'components/Item/Item.vue'
 import { RouteTo, setSessionStore, _initList } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading } from 'vant'
@@ -83,11 +73,13 @@ export default {
             this.$router.push('/orderDetail')
         },
         RouteTo: RouteTo
+    },
+    components: {
+        orderItem
     }
 }
 </script>
 <style lang="scss" scoped>
-@import 'sass/mixin.scss';
 .co_page {
     position: absolute;
     top: 1.1rem;
@@ -98,66 +90,6 @@ export default {
         width: 85%;
         margin: 0 auto;
         min-height: 5rem;
-        .co_item {
-            width: 100%;
-            @include borderRadius(5%);
-            background-color: #ffffff;
-            margin-bottom: .2rem;
-            .item_head {
-                @include hl(.5rem);
-                position: relative;
-                display: flex;
-                .img_wrapper {
-                    width: .3rem;
-                    height: .3rem;
-                    margin-left: .1rem;
-                    @include ct;
-                    position: relative;
-                    @include borderRadius(50%);
-                    overflow: hidden;
-                    img {
-                        @include wh(100%, 100%);
-                        @include pi(0, 0);
-                    }
-                }
-                .order_id {
-                    font-size: .13rem;
-                    margin-left: .1rem;
-                    width: 1.5rem;
-                    @include tw;
-                }
-            }
-            .item_line {
-                width: 80%;
-                height: 1px;
-                margin: 0 auto;
-                background-color: #f2f3f4;
-            }
-            .item_content {
-                position: relative;
-                padding-bottom: .1rem;
-                p {
-                    @include hl(.35rem);
-                    font-size: .14rem;
-                    margin-left: .2rem;
-                }
-                .time {
-                    margin-top: .1rem;
-                }
-                .location {
-                    margin-top: .1rem;
-                }
-                .cancel_btn {
-                    position: absolute;
-                    bottom: .1rem;
-                    right: .1rem;
-                    @include hl(.32rem);
-                    font-size: .13rem;
-                    padding: 0 .1rem;
-                    color: #999999;
-                }
-            }
-        }
     }
 }
 </style>

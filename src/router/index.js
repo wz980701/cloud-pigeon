@@ -1,28 +1,27 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Index from '../page/Index/Index.vue'
-import RiderRegist from '../page/RiderRegist/RiderRegist.vue'
-import StudentRegist from '../page/StudentRegist/StudentRegist.vue'
-import Login from '../page/Login/Login.vue'
-import Home from '../page/Home/Home.vue'
-import Order from '../page/Order/Order.vue'
-import My from '../page/My/My.vue'
-import Shop from '../page/Shop/Shop.vue'
-import WaitOrder from '../page/WaitOrder/WaitOrder.vue'
-import AskOrder from '../page/AskOrder/AskOrder.vue'
-import CancelOrder from '../page/CancelOrder/CancelOrder.vue'
-import FinishOrder from '../page/FinishOrder/FinishOrder.vue'
-import ModifyLocation from '../page/ModifyLocation/ModifyLocation.vue'
-import RiderOrder from '../page/RiderOrder/RiderOrder.vue'
-import WaitRiderOrder from '../page/WaitRiderOrder/WaitRiderOrder.vue'
-import PastRiderOrder from '../page/PastRiderOrder/PastRiderOrder.vue'
-import AskRiderOrder from '../page/AskRiderOrder/AskRiderOrder.vue'
-import OrderDetail from '../page/OrderDetail/OrderDetail.vue'
-import Goods from '../page/Goods/Goods.vue'
-import Help from '../page/Help/Help.vue'
-import Contact from '../page/Contact/Contact.vue'
-import Pay from '../page/Pay/Pay.vue'
+const Index = () => import('../page/Index/Index.vue')
+const RiderRegist = () => import('../page/RiderRegist/RiderRegist.vue')
+const StudentRegist = () => import('../page/StudentRegist/StudentRegist.vue')
+const Login = () => import('../page/Login/Login.vue')
+const Home = () => import('../page/Home/Home.vue')
+const Order = () => import('../page/Order/Order.vue')
+const My = () => import('../page/My/My.vue')
+const Shop = () => import('../page/Shop/Shop.vue')
+const WaitOrder = () => import('../page/WaitOrder/WaitOrder.vue')
+const AskOrder = () => import('../page/AskOrder/AskOrder.vue')
+const CancelOrder = () => import('../page/CancelOrder/CancelOrder.vue')
+const FinishOrder = () => import('../page/FinishOrder/FinishOrder.vue')
+const ModifyLocation = () => import('../page/ModifyLocation/ModifyLocation.vue')
+const RiderOrder = () => import('../page/RiderOrder/RiderOrder.vue')
+const WaitRiderOrder = () => import('../page/WaitRiderOrder/WaitRiderOrder.vue')
+const PastRiderOrder = () => import('../page/PastRiderOrder/PastRiderOrder.vue')
+const AskRiderOrder = () => import('../page/AskRiderOrder/AskRiderOrder.vue')
+const OrderDetail = () => import('../page/OrderDetail/OrderDetail.vue')
+const Goods = () => import('../page/Goods/Goods.vue')
+const Help = () => import('../page/Help/Help.vue')
+const Contact = () => import('../page/Contact/Contact.vue')
 
 Vue.use(VueRouter)
 
@@ -156,10 +155,6 @@ export default new VueRouter({
         {
             path: '/riderOrderDetail',
             component: OrderDetail
-        },
-        {
-            path: '/pay',
-            component: Pay
         }
     ]
 })

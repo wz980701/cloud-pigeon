@@ -16,31 +16,13 @@
             </div>
             <ul class="aro_list" ref="aro_list">
                 <li
-                class="aro_item"
+                is="orderItem"
                 v-for="(item, index) in askOrderList"
                 :key="index"
-                @click="ToDetail(index)"
+                :data="item"
+                riderAsk="未接单"
+                @ToAccept="ToAccept(index)"
                 >
-                    <div class="item_head">
-                        <div class="img_wrapper">
-                            <img src="../../common/images/head.jpg" alt="dinning_room">
-                        </div>
-                        <p class="order_id">订单编号：{{item.timestamp + "" + item.serial_id}}</p>
-                        <p class="order_status">{{item.status}}</p>
-                    </div>
-                    <div class="item_line"></div>
-                    <div class="item_content">
-                        <p class="time">下单时间：{{item.created_at}}</p>
-                        <p class="location">地址：{{item.district + item.dormtype + item.building + '栋' + item.dorm}}</p>
-                        <p class="phone">用户电话： {{item.userphone}}</p>
-                        <input
-                        type="button"
-                        class="cancel_btn"
-                        value="接单"
-                        ref="cancel_btn"
-                        @click.stop="ToAccept(index)"
-                        >
-                    </div>
                 </li>
             </ul>
         </van-pull-refresh>
@@ -49,6 +31,7 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
+import orderItem from 'components/Item/Item.vue'
 import { RouteTo, timestampToTime, setSessionStore, getSessionStore, webCloseLink, _initList } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
@@ -84,9 +67,6 @@ export default {
                 this._initScroll() //初始化scroll
             })
     },
-    // destroyed () {
-    //     this.websocket.close()
-    // },
     methods: {
         _initScroll () {
             this.aro_page = new BScroll(this.$refs.aro_page, {
@@ -124,22 +104,28 @@ export default {
             this.websocket.onmessage = (evt) => { //若有webpack推送数据，则增加数据
                 const data = JSON.parse(evt.data)
                 if (data.message == "cancel") {
-                    for (let item of this.askOrderList) {
-                        if (item['serial_id'] == data.id) {
-                            this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
-                        }
-                    }
+                    this.getCancel(data)
                 } else if (data.message == "generate") {
-                    data.timestamp = data.time
-                    data.created_at = timestampToTime(data.time)
-                    data.serial_id = data.id
-                    this.askOrderList.unshift(data)
+                    this.getGenerate(data)
                 }
                 console.log('Retrieved data from server: ' + data.message);
             };
             this.websocket.onerror = (evt) => {
                 console.log('Error occured: ' + evt.data);
             };
+        },
+        getCancel (data) {
+            for (let item of this.askOrderList) {
+                if (item['serial_id'] == data.id) {
+                    this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
+                }
+            }
+        },
+        getGenerate (data) {
+            data.timestamp = data.time
+            data.created_at = timestampToTime(data.time)
+            data.serial_id = data.id
+            this.askOrderList.unshift(data)
         },
         ToAccept (index) {  //接收订单
             Dialog.confirm({
@@ -192,6 +178,9 @@ export default {
             this.isInit = true
         },
         RouteTo: RouteTo
+    },
+    components: {
+        orderItem
     }
 }
 </script>
@@ -228,73 +217,6 @@ export default {
         margin: 0 auto;
         margin-top: .2rem;
         min-height: 5rem;
-        .aro_item {
-            width: 100%;
-            @include borderRadius(5%);
-            background-color: #ffffff;
-            margin-bottom: .2rem;
-            .item_head {
-                @include hl(.5rem);
-                position: relative;
-                display: flex;
-                .img_wrapper {
-                    width: .3rem;
-                    height: .3rem;
-                    margin-left: .1rem;
-                    @include ct;
-                    position: relative;
-                    @include borderRadius(50%);
-                    overflow: hidden;
-                    img {
-                        @include wh(100%, 100%);
-                        @include pi(0, 0);
-                    }
-                }
-                .order_id {
-                    font-size: .13rem;
-                    margin-left: .1rem;
-                    width: 1.5rem;
-                    @include tw;
-                }
-                .order_status {
-                    font-size: .13rem;
-                    color: #455a64;
-                    margin-left: .5rem;
-                }
-            }
-            .item_line {
-                width: 80%;
-                height: 1px;
-                margin: 0 auto;
-                background-color: #f2f3f4;
-            }
-            .item_content {
-                position: relative;
-                padding-bottom: .1rem;
-                p {
-                    @include hl(.32rem);
-                    font-size: .14rem;
-                    margin-left: .2rem;
-                }
-                .time {
-                    margin-top: .1rem;
-                }
-                .location {
-                    margin-top: .1rem;
-                }
-                .cancel_btn {
-                    position: absolute;
-                    bottom: .1rem;
-                    right: .1rem;
-                    @include hl(.32rem);
-                    font-size: .13rem;
-                    @include borderRadius(.05rem);
-                    padding: 0 .1rem;
-                    @include border-1px(#ccc);
-                    background-color: #ffffff;
-                }
-            }
-        }
     }
 }
 </style>

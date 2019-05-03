@@ -23,7 +23,6 @@
 <script>
 import footerBottom from 'components/Footer/Footer.vue'
 import headTop from 'components/Header/Header.vue'
-
 export default {
     name: 'Order',
     data () {
@@ -57,13 +56,6 @@ export default {
 .o_page {
     background-color: $background-color;
     height: 100%;
-    // .o_head {
-    //     @include wh(100%, .5rem);
-    //     line-height: .5rem;
-    //     text-align: center;
-    //     color: $font-color;
-    //     background-color: $theme-color;
-    // }
     .o_tab {
         background-color: #ffffff;
         display: flex;

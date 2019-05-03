@@ -3,33 +3,15 @@
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
                 <van-loading v-show="!isInit" class="wo_loading"></van-loading>
                 <ul class="wo_list" ref="wo_list">
-                <li
-                class="wo_item"
-                v-for="(item, index) in allOrderList"
-                :key="index"
-                @click="ToDetail(index)"
-                >
-                    <div class="item_head">
-                        <div class="img_wrapper">
-                            <img src="../../common/images/head.jpg" alt="dinning_room">
-                        </div>
-                        <p class="order_id">订单编号：{{item.timestamp + "" + item.serial_id}}</p>
-                        <p class="order_status">{{item.status}}</p>
-                    </div>
-                    <div class="item_line"></div>
-                    <div class="item_content">
-                        <p class="time">下单时间：{{item.created_at}}</p>
-                        <p class="location">地址：{{item.district + item.dormtype + item.building + '栋' + item.dorm}}</p>
-                        <p class="phone" v-if="item.deliveryphone">云鸽电话： {{item.deliveryphone}}</p>
-                        <p class="arrive_time">预计{{item.time}}分钟到达</p>
-                    </div>
-                    <input
-                    type="button"
-                    value="确认送达"
-                    class="confirm_btn"
-                    @click.stop="ToConfirmOrder(index)"
+                    <li
+                    is="order-item"
+                    v-for="(item, index) in allOrderList"
+                    :data="item"
+                    wait="已接单"
+                    :key="index"
+                    @ToConfirmOrder="ToConfirmOrder(index)"
                     >
-                </li>
+                    </li>
             </ul>
         </van-pull-refresh>
     </div>
@@ -37,7 +19,8 @@
 <script>
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import { RouteTo, timestampToTime, timestampToExpectedTime, setSessionStore } from 'js/common.js'
+import orderItem from 'components/Item/Item.vue'
+import { RouteTo, setSessionStore, _initList } from 'js/common.js'
 import { orderList, confirm } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -59,12 +42,7 @@ export default {
                 status: '已接单'
             }
             orderList(this.params).then((res) => {
-                res.data.data.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.time = timestampToExpectedTime(item.created_at)
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.allOrderList = res.data.data
+                this.allOrderList = _initList(res)
                 this.isInit = true
             }).catch(() => {
                 Dialog.alert({
@@ -86,12 +64,7 @@ export default {
                 this.$toast('刷新成功');
                 this.isLoading = false;
                 orderList(this.params).then((res) => {
-                res.data.data.forEach((item) => {
-                    item.timestamp = item.created_at
-                    item.time = timestampToExpectedTime(item.created_at)
-                    item.created_at = timestampToTime(item.created_at)
-                })
-                this.allOrderList = res.data.data
+                this.allOrderList = _initList(res)
                 setSessionStore('all_list', JSON.stringify(this.allOrderList))
                 this.isInit = true
             }).catch((err) => {
@@ -101,10 +74,6 @@ export default {
                 this._initScroll() //初始化scroll
             })
             }, 500)
-        },
-        ToDetail (index) {
-            setSessionStore('order_id', this.allOrderList[index].serial_id)
-            this.$router.push('/orderDetail')
         },
         ToConfirmOrder(index) {
             Dialog.confirm({
@@ -128,6 +97,9 @@ export default {
             })
         },
         RouteTo: RouteTo
+    },
+    components: {
+        orderItem
     }
 }
 </script>
@@ -143,81 +115,6 @@ export default {
         width: 85%;
         margin: 0 auto;
         min-height: 5rem;
-        .wo_item {
-            position: relative;
-            width: 100%;
-            @include borderRadius(5%);
-            background-color: #ffffff;
-            margin-bottom: .2rem;
-            &:first-child {
-                margin-top: .2rem;
-            }
-            .item_head {
-                @include hl(.5rem);
-                position: relative;
-                display: flex;
-                .img_wrapper {
-                    width: .3rem;
-                    height: .3rem;
-                    margin-left: .1rem;
-                    @include ct;
-                    position: relative;
-                    @include borderRadius(50%);
-                    overflow: hidden;
-                    img {
-                        @include wh(100%, 100%);
-                        @include pi(0, 0);
-                    }
-                }
-                .order_id {
-                    font-size: .13rem;
-                    margin-left: .1rem;
-                    width: 1.5rem;
-                    @include tw;
-                }
-                .order_status {
-                    font-size: .13rem;
-                    color: #455a64;
-                    margin-left: .5rem;
-                }
-            }
-            .item_line {
-                width: 80%;
-                height: 1px;
-                margin: 0 auto;
-                background-color: #f2f3f4;
-            }
-            .item_content {
-                position: relative;
-                padding-bottom: .6rem;
-                p {
-                    @include hl(.32rem);
-                    font-size: .14rem;
-                    margin-left: .2rem;
-                }
-                .time {
-                    margin-top: .1rem;
-                }
-                .location {
-                    margin-top: .1rem;
-                }
-                .arrive_time {
-                    font-size: .13rem;
-                    color: #455a64;
-                }
-            }
-            .confirm_btn {
-                position: absolute;
-                bottom: .2rem;
-                right: .2rem;
-                @include hl(.32rem);
-                font-size: .13rem;
-                @include borderRadius(.05rem);
-                padding: 0 .1rem;
-                @include border-1px(#ccc);
-                background-color: #ffffff;
-            }
-        }
     }
 }
 </style>
