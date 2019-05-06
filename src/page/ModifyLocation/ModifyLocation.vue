@@ -28,7 +28,7 @@
 </template>
 <script>
 import { Dialog } from 'vant'
-import { setSessionStore, getSessionStore } from 'js/common.js'
+import { setSessionStore, getSessionStore, hideMenu } from 'js/common.js'
 import { changeAddress } from 'js/api.js'
 import headTop from 'components/Header/Header.vue'
 
@@ -39,6 +39,9 @@ export default {
             building: '',
             dorm: ''
         }
+    },
+    created () {
+        hideMenu()
     },
     methods: {
         ToModify () {

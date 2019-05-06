@@ -3,7 +3,7 @@
         <head-top goBack="订单详情" class="od_head"></head-top>
             <section class="od_food">
                 <p class="head">
-                    四饭
+                    四饭 {{order_info.stallname}}
                 </p>
                 <div class="line"></div>
                 <div class="food">

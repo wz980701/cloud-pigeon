@@ -75,7 +75,7 @@
 <script>
 import { Dialog } from 'vant'
 import { minLength, maxLength, numeric, required } from 'vuelidate/lib/validators'
-import { setSessionStore, setLocalStore, getFormdata } from 'js/common.js'
+import { setSessionStore, setLocalStore, getFormdata, setCookie, hideMenu } from 'js/common.js'
 import { login } from 'js/api.js'
 
 export default {
@@ -106,6 +106,7 @@ export default {
         }
     },
     created () {
+        hideMenu()
         if (this.$route.path.split('/')[1] !== 'studentLogin') {    //判断是用户登录还是骑手登录
             this.formdata.role = 'delivery'
             this.path = '/riderOrder'
@@ -156,9 +157,11 @@ export default {
             if (this.formdata.role === 'user') {
                 setSessionStore('user_info', JSON.stringify(data))
                 setLocalStore('user_token', data.token)
+                setCookie('user_token', data.token, 30)
             } else {
                 setSessionStore('rider_info', JSON.stringify(data))
                 setLocalStore('rider_token', data.token)
+                setCookie('rider_token', data.token, 30)
             }
         }
     }

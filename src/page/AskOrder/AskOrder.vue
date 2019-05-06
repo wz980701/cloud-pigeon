@@ -20,7 +20,7 @@
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import orderItem from 'components/Item/Item.vue'
-import { RouteTo, webCloseLink, _initList } from 'js/common.js'
+import { RouteTo, webCloseLink, _initList, hideMenu } from 'js/common.js'
 import { orderList, cancel } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -39,6 +39,7 @@ export default {
         }
     },
     created () {
+            hideMenu()
             this._initWebsocket()
             this.params = {
                 status: '未接单'

@@ -10,9 +10,13 @@
 </template>
 <script>
 import headTop from 'components/Header/Header.vue'
+import { hideMenu } from 'js/common.js'
 
 export default {
     name: 'Help',
+    created () {
+        hideMenu()
+    },
     methods: {
     },
     components: {

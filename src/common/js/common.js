@@ -20,6 +20,23 @@ export function getSessionStore (key) {  //读取sessionstorage
     return sessionStorage.getItem(key)
 }
 
+export function setCookie (cname, cvalue, exdays) { //设置cookie
+    var d = new Date();
+    d.setTime(d.getTime()+(exdays*24*60*60*1000));
+    var expires = "expires="+d.toGMTString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+export function getCookie (cname) { //获取cookie
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
 export function isEmpty (value) { //判断数组是否为空
     return Array.isArray(value) && value.length === 0
 }
@@ -115,5 +132,21 @@ export function _initList (res) {   //初始化订单列表数据
         item.created_at = timestampToTime(item.created_at)
     })
     return data
+}
+
+export function hideMenu () {
+    function onBridgeReady() {
+        WeixinJSBridge.call('hideOptionMenu');
+    }
+    if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    } else {
+        onBridgeReady();
+    }
 }
 

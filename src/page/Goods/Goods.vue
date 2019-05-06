@@ -56,6 +56,7 @@
         <shopCart
         :minPrice="minPrice"
         :selectFoods="selectFoods"
+        :selectGoods="selectGoods"
         ></shopCart>
     </div>
 </template>
@@ -122,6 +123,17 @@ export default {
                 })
             })
             return foods
+        },
+        selectGoods () {
+            let goods = []
+            this.goods.forEach((good) => {
+                good.recipe.forEach((food) => {
+                if (food.count) {
+                    goods.push(good.id)
+                }
+                })
+            })
+            return this.unique(goods)
         }
     },
     methods: {
@@ -153,6 +165,15 @@ export default {
             }
             this.menuIndex = index
             this.foodsScroll.scrollTo(0, -this.listHeight[index], 300)
+        },
+        unique (array) {
+            var r = [];
+            for(var i = 0, l = array.length; i < l; i++) {
+                for(var j = i + 1; j < l; j++)
+                if (array[i] === array[j]) j = ++i;
+                r.push(array[i]);
+            }
+            return r;
         }
     },
     components: {

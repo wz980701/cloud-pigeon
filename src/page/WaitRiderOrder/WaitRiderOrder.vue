@@ -31,7 +31,7 @@
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import orderItem from 'components/Item/Item.vue'
-import { RouteTo, setSessionStore, getSessionStore, webCloseLink, _initList } from 'js/common.js'
+import { RouteTo, setSessionStore, getSessionStore, webCloseLink, _initList, hideMenu } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -55,6 +55,7 @@ export default {
         }
     },
     created () {
+        hideMenu()
         this._initWebsocket()
         this._getList(this.districtList[0].district)
         this.$nextTick(() => {

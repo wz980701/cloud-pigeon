@@ -20,7 +20,7 @@
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import orderItem from 'components/Item/Item.vue'
-import { RouteTo, setSessionStore, _initList } from 'js/common.js'
+import { RouteTo, setSessionStore, _initList, hideMenu } from 'js/common.js'
 import { orderList, confirm } from 'js/api.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
@@ -38,6 +38,7 @@ export default {
         }
     },
     created () {
+            hideMenu()
             this.params = {
                 status: '已接单'
             }

@@ -80,10 +80,16 @@ import { generate, checkWx } from 'js/api.js'
 
 export default {
     props: {
+        selectGoods: {
+            type: Array,
+            default() {
+                return []
+            }
+        },
         selectFoods: {
             type: Array,
             default() {
-            return []
+                return []
             }
         },
         minPrice: {
@@ -257,48 +263,55 @@ export default {
                 }
             },
             ToPurchase () {
-                if (this.totalPrice < this.minPrice) {
-                    return
-                } else {
-                    Dialog.confirm({
-                        title: '订单金额',
-                        message: `你总共需要支付${this.totalPrice + this.deliveryPrice}元,确认下单吗？`
-                    }).then(() => {
-                        let countlist = []
-                        let idlist= []
-                        this.selectFoods.forEach((food) => {
-                            if (food.count) {
-                                countlist.push(food.count)
-                                idlist.push(food.id)
-                            }
-                        })
-                        const info = JSON.parse(getSessionStore('user_info'))
-                        const formdata = new FormData()
-                        formdata.append('foodlist', JSON.stringify(idlist))
-                        formdata.append('numberlist', JSON.stringify(countlist))
-                        formdata.append('money', this.totalPrice)
-                        // formdata.append('money', 0.01)
-                        formdata.append('district', info.district)
-                        formdata.append('dormtype', info.dormtype)
-                        formdata.append('building', info.building)
-                        formdata.append('dorm', info.dorm)
-                        formdata.append('userphone', info.phone)
-                        formdata.append('fee', this.deliveryPrice)
-                        // formdata.append('fee', 0)
-                        generate(formdata).then((res) => {
-                            const data = res.data.data
-                            console.log(res)
-                            console.log(data.jsApiParameters)
-                            console.log(data.out_trade_no)
-                            this.callpay (data.jsApiParameters, data.out_trade_no)
-                        }).catch(() => {
-                            Dialog.alert({
-                                message: '下单失败'
-                            })
-                        })
-                    }).catch(() => {
-                        return
+                const len = this.selectGoods.length
+                if (len > 1) {
+                    Dialog.alert({
+                        message: '不能跨档口点菜噢'
                     })
+                } else {
+                    console.log(this.selectGoods[0])
+                    if (this.totalPrice < this.minPrice) {
+                        return
+                    } else {
+                        Dialog.confirm({
+                            title: '订单金额',
+                            message: `你总共需要支付${this.totalPrice + this.deliveryPrice}元,确认下单吗？`
+                        }).then(() => {
+                            let countlist = []
+                            let idlist= []
+                            this.selectFoods.forEach((food) => {
+                                if (food.count) {
+                                    countlist.push(food.count)
+                                    idlist.push(food.id)
+                                }
+                            })
+                            const info = JSON.parse(getSessionStore('user_info'))
+                            const stall_id = this.selectGoods[0]
+                            const formdata = new FormData()
+                            formdata.append('foodlist', JSON.stringify(idlist))
+                            formdata.append('numberlist', JSON.stringify(countlist))
+                            formdata.append('money', this.totalPrice)
+                            // formdata.append('money', 0.01)
+                            formdata.append('district', info.district)
+                            formdata.append('dormtype', info.dormtype)
+                            formdata.append('building', info.building)
+                            formdata.append('dorm', info.dorm)
+                            formdata.append('userphone', info.phone)
+                            formdata.append('fee', this.deliveryPrice)
+                            formdata.append('stall_id', stall_id)
+                            // formdata.append('fee', 0)
+                            generate(formdata).then((res) => {
+                                const data = res.data.data
+                                this.callpay (data.jsApiParameters, data.out_trade_no)
+                            }).catch(() => {
+                                Dialog.alert({
+                                    message: '下单失败'
+                                })
+                            })
+                        }).catch(() => {
+                            return
+                        })
+                    }
                 }
             },
             jsApiCall (params, id)
@@ -311,13 +324,15 @@ export default {
                             out_trade_no: id
                         }
                         checkWx(param).then((res) => {
-                            console.log(res)
-                            Dialog.alert({
-                                message: '下单成功'
-                            })
-                            this.$router.push('/order')
-                        }).catch((err) => {
-                            console.log(err)
+                            const code = res.data.code
+                            if (code === 0) {
+                                Dialog.alert({
+                                    message: '下单成功'
+                                })
+                                this.$router.push('/order')
+                            }
+                        }).catch(() => {
+                            return
                         })
                     }
                 );

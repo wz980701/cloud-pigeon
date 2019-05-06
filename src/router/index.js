@@ -1,27 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-const Index = () => import('../page/Index/Index.vue')
-const RiderRegist = () => import('../page/RiderRegist/RiderRegist.vue')
-const StudentRegist = () => import('../page/StudentRegist/StudentRegist.vue')
-const Login = () => import('../page/Login/Login.vue')
-const Home = () => import('../page/Home/Home.vue')
-const Order = () => import('../page/Order/Order.vue')
-const My = () => import('../page/My/My.vue')
-const Shop = () => import('../page/Shop/Shop.vue')
-const WaitOrder = () => import('../page/WaitOrder/WaitOrder.vue')
-const AskOrder = () => import('../page/AskOrder/AskOrder.vue')
-const CancelOrder = () => import('../page/CancelOrder/CancelOrder.vue')
-const FinishOrder = () => import('../page/FinishOrder/FinishOrder.vue')
-const ModifyLocation = () => import('../page/ModifyLocation/ModifyLocation.vue')
-const RiderOrder = () => import('../page/RiderOrder/RiderOrder.vue')
-const WaitRiderOrder = () => import('../page/WaitRiderOrder/WaitRiderOrder.vue')
-const PastRiderOrder = () => import('../page/PastRiderOrder/PastRiderOrder.vue')
-const AskRiderOrder = () => import('../page/AskRiderOrder/AskRiderOrder.vue')
-const OrderDetail = () => import('../page/OrderDetail/OrderDetail.vue')
-const Goods = () => import('../page/Goods/Goods.vue')
-const Help = () => import('../page/Help/Help.vue')
-const Contact = () => import('../page/Contact/Contact.vue')
+const Index = r => require.ensure([], () => r(require('../page/Index/Index.vue')), 'Index')
+const RiderRegist = r => require.ensure([], () => r(require('../page/RiderRegist/RiderRegist.vue')), 'RiderRegist')
+const StudentRegist = r => require.ensure([], () => r(require('../page/StudentRegist/StudentRegist.vue')), 'StudentRegist')
+const Login = r => require.ensure([], () => r(require('../page/Login/Login.vue')), 'Login')
+const Home = r => require.ensure([], () => r(require('../page/Home/Home.vue')), 'Home')
+const Order = r => require.ensure([], () => r(require('../page/Order/Order.vue')), 'Order')
+const My = r => require.ensure([], () => r(require('../page/My/My.vue')), 'My')
+const Shop = r => require.ensure([], () => r(require('../page/Shop/Shop.vue')), 'Shop')
+const WaitOrder = r => require.ensure([], () => r(require('../page/WaitOrder/WaitOrder.vue')), 'WaitOrder')
+const AskOrder = r => require.ensure([], () => r(require('../page/AskOrder/AskOrder.vue')), 'AskOrder')
+const CancelOrder = r => require.ensure([], () => r(require('../page/CancelOrder/CancelOrder.vue')), 'CancelOrder')
+const FinishOrder = r => require.ensure([], () => r(require('../page/FinishOrder/FinishOrder.vue')), 'FinishOrder')
+const ModifyLocation = r => require.ensure([], () => r(require('../page/ModifyLocation/ModifyLocation.vue')), 'ModifyLocation')
+const RiderOrder = r => require.ensure([], () => r(require('../page/RiderOrder/RiderOrder.vue')), 'RiderOrder')
+const WaitRiderOrder = r => require.ensure([], () => r(require('../page/WaitRiderOrder/WaitRiderOrder.vue')), 'WaitRiderOrder')
+const PastRiderOrder = r => require.ensure([], () => r(require('../page/PastRiderOrder/PastRiderOrder.vue')), 'PastRiderOrder')
+const AskRiderOrder = r => require.ensure([], () => r(require('../page/AskRiderOrder/AskRiderOrder.vue')), 'AskRiderOrder')
+const OrderDetail = r => require.ensure([], () => r(require('../page/OrderDetail/OrderDetail.vue')), 'OrderDetail')
+const Goods = r => require.ensure([], () => r(require('../page/Goods/Goods.vue')), 'Goods')
+const Help = r => require.ensure([], () => r(require('../page/Help/Help.vue')), 'Help')
+const Contact = r => require.ensure([], () => r(require('../page/Contact/Contact.vue')), 'Contact')
+const Info = r => require.ensure([], () => r(require('../page/Info/Info.vue')), 'Info')
 
 Vue.use(VueRouter)
 
@@ -155,6 +156,10 @@ export default new VueRouter({
         {
             path: '/riderOrderDetail',
             component: OrderDetail
+        },
+        {
+            path: '/info',
+            component: Info
         }
     ]
 })

@@ -19,7 +19,7 @@
 import BScroll from 'better-scroll'
 import Vue from 'vue'
 import orderItem from 'components/Item/Item.vue'
-import { RouteTo, setSessionStore, _initList } from 'js/common.js'
+import { RouteTo, setSessionStore, _initList, hideMenu } from 'js/common.js'
 import { orderList } from 'js/api.js'
 import { PullRefresh, Loading } from 'vant'
 
@@ -37,6 +37,7 @@ export default {
         }
     },
     created () {
+            hideMenu()
             this.params = {
                 status: '已取消'
             }

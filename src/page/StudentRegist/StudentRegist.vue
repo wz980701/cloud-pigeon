@@ -125,7 +125,7 @@
 </template>
 <script>
 import { Dialog } from 'vant'
-import { setLocalStore, getLocalStore, setSessionStore, getFormdata } from 'js/common.js'
+import { setLocalStore, getLocalStore, setSessionStore, getFormdata, hideMenu } from 'js/common.js'
 import { regist, login } from 'js/api.js'
 import { required, minLength, maxLength, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 
@@ -171,6 +171,9 @@ export default {
                 numeric
             }
         }
+    },
+    created () {
+        hideMenu()
     },
     mounted () {
         this.showRegist = true

@@ -32,7 +32,7 @@
 <script>
 import footerBottom from 'components/Footer/Footer.vue'
 import headTop from 'components/Header/Header.vue'
-import { getSessionStore } from 'js/common.js'
+import { getSessionStore, hideMenu } from 'js/common.js'
 
 export default {
     name: 'Home',
@@ -40,6 +40,9 @@ export default {
         return {
             area: '未选定'
         }
+    },
+    created () {
+        hideMenu()
     },
     mounted () {
         this.area = JSON.parse(getSessionStore('user_info')).district //获取用户所在区域

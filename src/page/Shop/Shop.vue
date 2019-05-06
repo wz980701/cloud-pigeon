@@ -32,7 +32,7 @@
         </div>
         <div class="tab">
             <div class="tab-item">
-                配送时间： 午餐11-13点 晚餐17-20点 宵夜21-22点半
+                配送时间： 午餐11-13点 晚餐17-19点 宵夜21-22点半
             </div>
         </div>
         <keep-alive>
@@ -41,8 +41,13 @@
     </div>
 </template>
 <script>
+import { hideMenu } from 'js/common.js'
+
 export default {
     name: 'Shop',
+    created () {
+        hideMenu()
+    },
     methods: {
         RouteTo () {
             this.$router.push('/home')

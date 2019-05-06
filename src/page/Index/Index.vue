@@ -28,7 +28,7 @@
     </div>
 </template>
 <script>
-import { getLocalStore, setSessionStore, getSessionStore, isEmpty } from 'js/common.js'
+import { getLocalStore, setSessionStore, getSessionStore, isEmpty, getCookie, hideMenu } from 'js/common.js'
 import { login } from 'js/api.js'
 import { Dialog } from 'vant'
 
@@ -39,65 +39,82 @@ export default {
             showIndex: false
         }
     },
+    created () {
+        hideMenu()
+    },
     mounted () {
         this.showIndex = true
     },
     methods: {
         getRider () {
             if (!getLocalStore('rider_token')) { //初次登录没有token，则跳到注册页
-                Dialog.alert({
-                    message: '请先注册账号',
-                })
-                this.$router.push('/riderRegist')
-            } else {
-                    const formdata = new FormData()
-                    formdata.append('role', 'delivery'),
-                    formdata.append('token', getLocalStore('rider_token'))
-                    login(formdata).then((res) => {
-                        const data = res.data.data
-                        setSessionStore('rider_info', JSON.stringify(data))
-                        if (isEmpty(JSON.parse(getSessionStore('rider_info')))) { //如果rider_info为空，则重新登录
-                            Dialog.alert({
-                            message: '账号已过期，请重新登录'
-                        })
-                        this.$router.push('/riderLogin')
-                        } else {
-                            this.$router.push('/riderOrder')
-                        }
-                    }).catch(() => {
+                if (!getCookie('rider_token')) {
                         Dialog.alert({
-                            message: '账号已过期，请重新登录'
-                        })
+                        message: '请先注册账号',
                     })
+                    this.$router.push('/riderRegist')
+                } else {
+                    this.getRiderSuc()
+                }
+            } else {
+                this.getRiderSuc()
             }
         },
         getStudent () {
             if (!getLocalStore('user_token')) {
-                Dialog.alert({
-                    message: '请先注册账号'
-                })
-                this.$router.push('/studentRegist')
-            } else {
-                const formdata = new FormData()
-                formdata.append('role', 'user'),
-                formdata.append('token', getLocalStore('user_token'))
-                login(formdata).then((res) => {
-                    const data = res.data.data
-                    setSessionStore('user_info', JSON.stringify(data))
-                    if (isEmpty(JSON.parse(getSessionStore('user_info')))) {
-                        Dialog.alert({
-                        message: '账号已过期，请重新登录'
-                    })
-                    this.$router.push('/studentLogin')
-                    } else {
-                        this.$router.push('/home')
-                    }
-                }).catch(() => {
+                if (!getCookie('user_token')) {
                     Dialog.alert({
-                        message: '账号已过期，请重新登录'
+                        message: '请先注册账号'
                     })
-                })
+                    this.$router.push('/userRegist')
+                } else {
+                    this.getStudentSuc()
+                }
+            } else {
+                this.getStudentSuc()
             }
+        },
+        getRiderSuc () {
+            const formdata = new FormData()
+            formdata.append('role', 'delivery'),
+            formdata.append('token', getLocalStore('rider_token'))
+            login(formdata).then((res) => {
+                const data = res.data.data
+                setSessionStore('rider_info', JSON.stringify(data))
+                if (isEmpty(JSON.parse(getSessionStore('rider_info')))) { //如果rider_info为空，则重新登录
+                    Dialog.alert({
+                    message: '账号已过期，请重新登录'
+                })
+                this.$router.push('/riderLogin')
+                } else {
+                    this.$router.push('/riderOrder')
+                }
+            }).catch(() => {
+                Dialog.alert({
+                    message: '账号已过期，请重新登录'
+                })
+            })
+        },
+        getStudentSuc () {
+            const formdata = new FormData()
+            formdata.append('role', 'user'),
+            formdata.append('token', getLocalStore('user_token'))
+            login(formdata).then((res) => {
+                const data = res.data.data
+                setSessionStore('user_info', JSON.stringify(data))
+                if (isEmpty(JSON.parse(getSessionStore('user_info')))) {
+                    Dialog.alert({
+                    message: '账号已过期，请重新登录'
+                })
+                this.$router.push('/studentLogin')
+                } else {
+                    this.$router.push('/home')
+                }
+            }).catch(() => {
+                Dialog.alert({
+                    message: '账号已过期，请重新登录'
+                })
+            })
         }
     }
 }

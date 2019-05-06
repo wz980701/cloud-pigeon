@@ -96,7 +96,7 @@
 <script>
 import { Dialog } from 'vant'
 import { required, minLength, maxLength, numeric } from 'vuelidate/lib/validators'
-import { getFormdata } from 'js/common.js'
+import { getFormdata, hideMenu } from 'js/common.js'
 import { regist } from 'js/api.js'
 
 export default {
@@ -133,6 +133,9 @@ export default {
                 minLength: minLength(6)
             }
         }
+    },
+    created () {
+        hideMenu()
     },
     mounted () {
         this.showRegist = true

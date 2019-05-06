@@ -9,20 +9,14 @@
             </div>
             <div class="content">
                 <p class="userName">{{userName}}</p>
-                <!-- <router-link
-                to="/userInfo"
+                <router-link
+                to="/info"
                 tag="div"
                 class="userInfo"
                 >
                 个人信息
                 <i class="iconfont icon-r_arrow"></i>
-                </router-link> -->
-                <div
-                class="userInfo"
-                >
-                个人信息
-                <i class="iconfont icon-r_arrow"></i>
-                </div>
+                </router-link>
             </div>
         </section>
         <ul class="m_list">
@@ -43,7 +37,7 @@
 import footerBottom from 'components/Footer/Footer.vue'
 import { Dialog } from 'vant'
 import { logout } from 'js/api.js'
-import { getSessionStore } from 'js/common.js'
+import { getSessionStore, hideMenu } from 'js/common.js'
 
 export default {
     name: 'My',
@@ -61,6 +55,9 @@ export default {
             ],
             userName: ''
         }
+    },
+    created () {
+        hideMenu()
     },
     mounted () {
         this.userName = JSON.parse(getSessionStore('user_info')).name

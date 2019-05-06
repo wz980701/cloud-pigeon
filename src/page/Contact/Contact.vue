@@ -11,9 +11,13 @@
 </template>
 <script>
 import headTop from 'components/Header/Header.vue'
+import { hideMenu } from 'js/common.js'
 
 export default {
     name: 'Contact',
+    created () {
+        hideMenu()
+    },
     components: {
         headTop
     }
