@@ -301,8 +301,11 @@ export default {
                             formdata.append('stall_id', stall_id)
                             // formdata.append('fee', 0)
                             generate(formdata).then((res) => {
-                                const data = res.data.data
-                                this.callpay (data.jsApiParameters, data.out_trade_no)
+                                const code = res.data.code
+                                if (code === 0) {
+                                    const data = res.data.data
+                                    this.callpay (data.jsApiParameters, data.out_trade_no)
+                                }
                             }).catch(() => {
                                 Dialog.alert({
                                     message: '下单失败'

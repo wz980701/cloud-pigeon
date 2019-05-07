@@ -45,10 +45,10 @@ export function timestampToTime(timestamp) { //转化时间戳
     var date = new Date(timestamp * 1000);
     var Y = date.getFullYear() + '-';
     var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1): date.getMonth() + 1) + '-';
-    var D = date.getDate() + '  ';
-    var h = date.getHours() + ':';
-    var m = date.getMinutes() + ':';
-    var s = date.getSeconds();
+    var D = pad(date.getDate()) + '  ';
+    var h = pad(date.getHours()) + ':';
+    var m = pad(date.getMinutes()) + ':';
+    var s = pad(date.getSeconds());
     return Y + M + D + h+ m + s;
 }
 
@@ -62,10 +62,10 @@ export function timestampToExpectedTime (timestamp) { //转化预计到达时间
     }
     var Y = date.getFullYear() + '-';
     var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1): date.getMonth() + 1) + '-';
-    var D = date.getDate() + '  ';
-    var h = oh + ':';
-    var m = om + ':';
-    var s = date.getSeconds();
+    var D = pad(date.getDate()) + '  ';
+    var h = pad(oh) + ':';
+    var m = pad(om) + ':';
+    var s = pad(date.getSeconds());
     return Y + M + D + h+ m + s;
 }
 
@@ -148,5 +148,9 @@ export function hideMenu () {
     } else {
         onBridgeReady();
     }
+}
+
+export function pad (n) {   //如果月，日，时，分，秒小于10的话则加上前导零
+    return (n < 10) ? ("0" + n) : n;
 }
 

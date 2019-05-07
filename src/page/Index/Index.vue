@@ -54,10 +54,12 @@ export default {
                     })
                     this.$router.push('/riderRegist')
                 } else {
-                    this.getRiderSuc()
+                    const token = getCookie('rider_token')
+                    this.getRiderSuc(token)
                 }
             } else {
-                this.getRiderSuc()
+                const token = getLocalStore('rider_token')
+                this.getRiderSuc(token)
             }
         },
         getStudent () {
@@ -66,18 +68,20 @@ export default {
                     Dialog.alert({
                         message: '请先注册账号'
                     })
-                    this.$router.push('/userRegist')
+                    this.$router.push('/studentRegist')
                 } else {
-                    this.getStudentSuc()
+                    const token = getCookie('user_token')
+                    this.getStudentSuc(token)
                 }
             } else {
-                this.getStudentSuc()
+                const token = getLocalStore('user_token')
+                this.getStudentSuc(token)
             }
         },
-        getRiderSuc () {
+        getRiderSuc (token) {
             const formdata = new FormData()
             formdata.append('role', 'delivery'),
-            formdata.append('token', getLocalStore('rider_token'))
+            formdata.append('token', token)
             login(formdata).then((res) => {
                 const data = res.data.data
                 setSessionStore('rider_info', JSON.stringify(data))
@@ -95,10 +99,10 @@ export default {
                 })
             })
         },
-        getStudentSuc () {
+        getStudentSuc (token) {
             const formdata = new FormData()
             formdata.append('role', 'user'),
-            formdata.append('token', getLocalStore('user_token'))
+            formdata.append('token', token)
             login(formdata).then((res) => {
                 const data = res.data.data
                 setSessionStore('user_info', JSON.stringify(data))

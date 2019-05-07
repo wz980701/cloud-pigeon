@@ -17,7 +17,7 @@
                                 <img
                                 width="57"
                                 height="57"
-                                src="../../common/images/fourth.jpg"
+                                :src="item.url"
                                 alt="food">
                             </div>
                             <div class="content">
@@ -98,7 +98,7 @@
         </div>
 </template>
 <script>
-import { getSessionStore, timestampToTime } from 'js/common.js'
+import { getSessionStore, timestampToTime, hideMenu } from 'js/common.js'
 import { orderDetail } from 'js/api.js'
 import { Dialog } from 'vant'
 import headTop from 'components/Header/Header.vue'
@@ -111,6 +111,7 @@ export default {
         }
     },
     created () {
+        hideMenu()
         const params = {
             serial_id: getSessionStore('order_id')
         }

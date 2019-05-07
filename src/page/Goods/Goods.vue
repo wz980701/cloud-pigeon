@@ -31,7 +31,7 @@
                         >
                             <div class="icon">
                                 <img
-                                src="../../common/images/fourth.jpg"
+                                :src="food.url"
                                 alt="food_icon"
                                 width="57"
                                 height="57">
@@ -84,6 +84,7 @@ export default {
         if (!JSON.parse(getSessionStore('good_list'))) {
             foodList().then((res) => {
             this.goods = [...res.data.data]
+            console.log(this.goods)
             setSessionStore('good_list', JSON.stringify(this.goods))
             this.$nextTick(() => {
                 this._initScroll() //初始化scroll
