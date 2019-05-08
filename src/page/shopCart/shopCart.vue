@@ -77,6 +77,7 @@ import BScroll from 'better-scroll'
 import { Dialog } from 'vant'
 import { getSessionStore } from 'js/common.js'
 import { generate, checkWx } from 'js/api.js'
+import { RES_OK } from 'js/config.js'
 
 export default {
     props: {
@@ -302,7 +303,7 @@ export default {
                             // formdata.append('fee', 0)
                             generate(formdata).then((res) => {
                                 const code = res.data.code
-                                if (code === 0) {
+                                if (code === RES_OK) {
                                     const data = res.data.data
                                     this.callpay (data.jsApiParameters, data.out_trade_no)
                                 }
@@ -328,7 +329,7 @@ export default {
                         }
                         checkWx(param).then((res) => {
                             const code = res.data.code
-                            if (code === 0) {
+                            if (code === RES_OK) {
                                 Dialog.alert({
                                     message: '下单成功'
                                 })

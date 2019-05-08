@@ -98,6 +98,7 @@ import { Dialog } from 'vant'
 import { required, minLength, maxLength, numeric } from 'vuelidate/lib/validators'
 import { getFormdata, hideMenu } from 'js/common.js'
 import { regist } from 'js/api.js'
+import { RES_OK, LOST_ID } from 'js/config.js'
 
 export default {
     name: 'RiderRegist',
@@ -155,12 +156,16 @@ export default {
         },
         getRes (res) {
             const code = res.data.code
-            if (code !== 0) {
+            if (code === RES_OK) {
+                this.getSuc(res)
+            } else if (code === LOST_ID) {
+                Dialog.alert({
+                    message: '请从服务号菜单进入'
+                })
+            }  else {
                 Dialog.alert({
                     message: '该手机号已被注册'
                 })
-            } else {
-                this.getSuc()
             }
         },
         getSuc () {

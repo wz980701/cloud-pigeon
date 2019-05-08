@@ -127,6 +127,7 @@
 import { Dialog } from 'vant'
 import { setLocalStore, getLocalStore, setSessionStore, getFormdata, hideMenu } from 'js/common.js'
 import { regist, login } from 'js/api.js'
+import { RES_OK, LOST_ID } from 'js/config.js'
 import { required, minLength, maxLength, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 
 export default {
@@ -193,12 +194,16 @@ export default {
         },
         getRes (res) {
             const code = res.data.code
-            if (code !== 0) {
+            if (code === RES_OK) {
+                this.getSuc(res)
+            } else if (code === LOST_ID) {
+                Dialog.alert({
+                    message: '请从服务号菜单进入'
+                })
+            }  else {
                 Dialog.alert({
                     message: '该手机号已被注册'
                 })
-            } else {
-                this.getSuc(res)
             }
         },
         getSuc (res) {

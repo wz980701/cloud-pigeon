@@ -43,7 +43,7 @@
                 </div>
                 <div class="line"></div>
                 <div class="total_price">
-                    合计 <i>￥{{order_info.money}}</i>
+                    合计 <i>￥{{Number(order_info.money) + Number(order_info.fee)}}</i>
                 </div>
             </section>
             <section class="od_delivery" v-if="order_info.deliveryphone">

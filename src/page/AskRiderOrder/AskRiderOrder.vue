@@ -34,6 +34,7 @@ import BScroll from 'better-scroll'
 import orderItem from 'components/Item/Item.vue'
 import { RouteTo, timestampToTime, setSessionStore, getSessionStore, webCloseLink, _initList, hideMenu } from 'js/common.js'
 import { orderList } from 'js/api.js'
+import { RES_OK } from 'js/config.js'
 import { PullRefresh, Loading, Dialog } from 'vant'
 
 Vue.use(PullRefresh)
@@ -108,6 +109,8 @@ export default {
                     this.getCancel(data)
                 } else if (data.message == "generate") {
                     this.getGenerate(data)
+                } else if (data.message == "delivery") {
+                    this.getDelivery(data)
                 }
                 console.log('Retrieved data from server: ' + data.message);
             };
@@ -116,6 +119,13 @@ export default {
             };
         },
         getCancel (data) {
+            for (let item of this.askOrderList) {
+                if (item['serial_id'] == data.id) {
+                    this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
+                }
+            }
+        },
+        getDelivery (data) {
             for (let item of this.askOrderList) {
                 if (item['serial_id'] == data.id) {
                     this.askOrderList.splice(this.askOrderList.indexOf(item), 1)

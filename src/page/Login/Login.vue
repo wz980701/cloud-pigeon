@@ -77,6 +77,7 @@ import { Dialog } from 'vant'
 import { minLength, maxLength, numeric, required } from 'vuelidate/lib/validators'
 import { setSessionStore, setLocalStore, getFormdata, setCookie, hideMenu } from 'js/common.js'
 import { login } from 'js/api.js'
+import { RES_OK, LOST_ID } from 'js/config.js'
 
 export default {
     name: 'StudentLogin',
@@ -132,12 +133,16 @@ export default {
         },
         getRes (res) {
             const code = res.data.code
-            if (code !== 0) {   //当code不为0，即登录不成功时，报错
+            if (code === RES_OK) {   //当code不为0，即登录不成功时，报错
+                this.getSuc(res)
+            } else if (code === LOST_ID) {
+                Dialog.alert({
+                    message: '请从服务号菜单进入'
+                })
+            } else {
                 Dialog.alert({
                     message: '账号或密码有误'
                 })
-            } else {
-                this.getSuc(res)
             }
         },
         getSuc (res) {
