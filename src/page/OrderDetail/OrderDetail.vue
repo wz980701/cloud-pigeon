@@ -10,7 +10,7 @@
                     <ul class="list">
                         <li
                         class="item"
-                        v-for="(item, index) in order_info.foodlist"
+                        v-for="(item, index) in order_info.food_list"
                         :key="index"
                         >
                             <div class="img_wrapper">
@@ -26,7 +26,7 @@
                                         {{item.food}}
                                     </p>
                                     <p class="count">
-                                        x{{order_info.numberlist[index]}}
+                                        x{{order_info.food_number_list[index]}}
                                     </p>
                                 </div>
                                 <p class="price">
@@ -118,7 +118,7 @@ export default {
         orderDetail(params).then((res) => {
             res.data.data.timestamp = res.data.data.created_at
             res.data.data.created_at = timestampToTime(res.data.data.created_at)
-            res.data.data.numberlist = JSON.parse(res.data.data.numberlist) //将json数组转化为js数组
+            res.data.data.food_number_list = JSON.parse(res.data.data.food_number_list) //将json数组转化为js数组
             this.order_info = res.data.data
         }).catch(() => {
             Dialog.alert({

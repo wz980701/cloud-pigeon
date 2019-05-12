@@ -198,9 +198,9 @@ export default {
                 this.getSuc(res)
             } else if (code === LOST_ID) {
                 Dialog.alert({
-                    message: '请从服务号菜单进入'
+                    message: '请从服务号菜单登录'
                 })
-            }  else {
+            } else {
                 Dialog.alert({
                     message: '该手机号已被注册'
                 })

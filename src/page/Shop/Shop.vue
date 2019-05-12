@@ -6,7 +6,7 @@
             </div>
             <div class="content-wrapper">
                 <div class="avatar">
-                    <img src="../../common/images/fourth.jpg" width="64" height="64">
+                    <img src="http://pr34worqx.bkt.clouddn.com/1/shop.jpg" width="64" height="64">
                 </div>
                 <div class="content">
                     <div class="title">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="background">
-                <img src="../../common/images/fourth.jpg" width="100%" height="100%">
+                <img src="http://pr34worqx.bkt.clouddn.com/1/shop.jpg" width="100%" height="100%">
             </div>
         </div>
         <div class="tab">

@@ -34,11 +34,11 @@ import BScroll from 'better-scroll'
 import orderItem from 'components/Item/Item.vue'
 import { RouteTo, timestampToTime, setSessionStore, getSessionStore, webCloseLink, _initList, hideMenu } from 'js/common.js'
 import { orderList } from 'js/api.js'
-import { RES_OK } from 'js/config.js'
-import { PullRefresh, Loading, Dialog } from 'vant'
+import { PullRefresh, Loading, Dialog, Toast } from 'vant'
 
 Vue.use(PullRefresh)
 Vue.use(Loading)
+Vue.use(Toast)
 
 export default {
     name: 'AskOrder',
@@ -55,7 +55,8 @@ export default {
             ],
             params: null, //下拉刷新时所传参数
             websocket: null,
-            scroll: 0 //初始化scroll
+            scroll: 0, //初始化scroll
+            delivery_id: ''
         }
     },
     activated() {
@@ -121,11 +122,14 @@ export default {
         getCancel (data) {
             for (let item of this.askOrderList) {
                 if (item['serial_id'] == data.id) {
+                    const message = `用户手机号为${item.userphone}的订单已取消`
+                    Toast(message)
                     this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
                 }
             }
         },
         getDelivery (data) {
+            this.delivery_id = data.id
             for (let item of this.askOrderList) {
                 if (item['serial_id'] == data.id) {
                     this.askOrderList.splice(this.askOrderList.indexOf(item), 1)
@@ -139,18 +143,22 @@ export default {
             this.askOrderList.unshift(data)
         },
         ToAccept (index) {  //接收订单
-            Dialog.confirm({
-                message: '确定要接下该单吗？'
-            }).then(() => {
-                Dialog.alert({
-                    message: '接单成功'
+            if (this.askOrderList[index].serial_id === this.delivery_id) {
+                Toast('该单已被其他云鸽接下')
+            } else {
+                Dialog.confirm({
+                    message: '确定要接下该单吗？'
+                }).then(() => {
+                    Dialog.alert({
+                        message: '接单成功'
+                    })
+                    this._sendWebsocket(index)
+                    this.saveOrder(index)
+                    this.askOrderList.splice(index, 1)
+                }).catch(() => {
+                    return
                 })
-                this._sendWebsocket(index)
-                this.saveOrder(index)
-                this.askOrderList.splice(index, 1)
-            }).catch(() => {
-                return
-            })
+            }
         },
         saveOrder (index) {
             const data = JSON.stringify(this.askOrderList[index])

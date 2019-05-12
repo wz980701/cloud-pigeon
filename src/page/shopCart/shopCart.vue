@@ -289,8 +289,8 @@ export default {
                             const info = JSON.parse(getSessionStore('user_info'))
                             const stall_id = this.selectGoods[0]
                             const formdata = new FormData()
-                            formdata.append('foodlist', JSON.stringify(idlist))
-                            formdata.append('numberlist', JSON.stringify(countlist))
+                            formdata.append('food_list', JSON.stringify(idlist))
+                            formdata.append('food_number_list', JSON.stringify(countlist))
                             formdata.append('money', this.totalPrice)
                             // formdata.append('money', 0.01)
                             formdata.append('district', info.district)
@@ -300,6 +300,7 @@ export default {
                             formdata.append('userphone', info.phone)
                             formdata.append('fee', this.deliveryPrice)
                             formdata.append('stall_id', stall_id)
+                            formdata.append('shop_id', 1)
                             // formdata.append('fee', 0)
                             generate(formdata).then((res) => {
                                 const code = res.data.code

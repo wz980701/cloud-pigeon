@@ -37,6 +37,9 @@ export default {
             this.$root.eventHub.$emit('cart.add', event.target)
         },
         decreaseCart () {
+            if (this.food.count === 0) {
+                return
+            }
             this.food.count--
         }
     }

@@ -76,7 +76,7 @@
 import { Dialog } from 'vant'
 import { minLength, maxLength, numeric, required } from 'vuelidate/lib/validators'
 import { setSessionStore, setLocalStore, getFormdata, setCookie, hideMenu } from 'js/common.js'
-import { login } from 'js/api.js'
+import { login, getOpenid } from 'js/api.js'
 import { RES_OK, LOST_ID } from 'js/config.js'
 
 export default {
@@ -124,11 +124,11 @@ export default {
                 })
             } else {
                 const formdata = getFormdata(this.formdata)
-                login(formdata).then((res) => {
-                    this.getRes(res)
-                }).catch(() => {
-                    this.getFail()
-                })
+                    login(formdata).then((res) => {
+                        this.getRes(res)
+                    }).catch(() => {
+                        this.getFail()
+                    })
             }
         },
         getRes (res) {
@@ -137,7 +137,7 @@ export default {
                 this.getSuc(res)
             } else if (code === LOST_ID) {
                 Dialog.alert({
-                    message: '请从服务号菜单进入'
+                    message: '请从服务号菜单登录'
                 })
             } else {
                 Dialog.alert({
