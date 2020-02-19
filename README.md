@@ -32,7 +32,7 @@ vue2 + vuex + vue-router + webpack + ES6/7 + sass + vant-ui
 
 #### **主界面**
 
-![image-20200219142850637](http://github.com/wz980701/readme_public/raw/master/img/图片1.png)
+![image-20200219142850637](https://github.com/wz980701/readme_public/raw/master/img/图片1.png)
 
 #### 注册界面
 
