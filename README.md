@@ -36,36 +36,36 @@ vue2 + vuex + vue-router + webpack + ES6/7 + sass + vant-ui
 
 #### 注册界面
 
-![image-20200219142929927](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219142929927.png)
+![image-20200219142929927](https://github.com/wz980701/readme_public/raw/master/img/图片2.png)
 
 #### 登录界面
 
-![image-20200219143017106](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143017106.png)
+![image-20200219143017106](https://github.com/wz980701/readme_public/raw/master/img/图片3.png)
 
 
 
 #### 首页界面
 
-![image-20200219143146745](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143146745.png)
+![image-20200219143146745](https://github.com/wz980701/readme_public/raw/master/img/图片4.png)
 
 #### 点餐界面
 
-![image-20200219143205656](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143205656.png)
+![image-20200219143205656](https://github.com/wz980701/readme_public/raw/master/img/图片5.png)
 
 #### 订单界面
 
-![image-20200219143251721](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143251721.png)
+![image-20200219143251721](https://github.com/wz980701/readme_public/raw/master/img/图片6.png)
 
 #### 我的界面
 
-![image-20200219143303123](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143303123.png)
+![image-20200219143303123](https://github.com/wz980701/readme_public/raw/master/img/图片7.png)
 
 ### 云鸽端
 
 #### 我的订单界面
 
-![image-20200219143353404](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143353404.png)
+![image-20200219143353404](https://github.com/wz980701/readme_public/raw/master/img/图片8.png)
 
 #### 订单详情界面
 
-![image-20200219143406800](C:\Users\吴泽\AppData\Roaming\Typora\typora-user-images\image-20200219143406800.png)
+![image-20200219143406800](https://github.com/wz980701/readme_public/raw/master/img/图片9.png)
